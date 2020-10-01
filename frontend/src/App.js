@@ -1,17 +1,18 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Login from "./views/Login";
+import { ThemeProvider } from "@material-ui/core";
 
-function App() {
+import { AuthContextProvider } from "./context/AuthContext";
+import Router from "./Router";
+import theme from "./config/theme";
+
+const App = () => {
   return (
-    <Router>
-      <Switch>
-        <Route path="/login">
-          <Login />
-        </Route>
-      </Switch>
-    </Router>
+    <ThemeProvider theme={theme}>
+      <AuthContextProvider>
+        <Router />
+      </AuthContextProvider>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
