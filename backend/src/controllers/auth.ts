@@ -1,14 +1,16 @@
+import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import { User } from "../models/user";
 import storage from "../storage";
 import { JWT_SECRET } from "../utils/constants";
 import { handleResponse } from "../utils/responses";
 
-export const generateTokens = (user) => {
+export const generateTokens = (user: Required<User>): string => {
   const { id, role } = user;
   const accessToken = jwt.sign(
     {
       exp: Math.floor(Date.now() / 1000) + 60 * 60 * 12,
-      data: { id, role },
+      data: { id, userRole: role },
     },
     JWT_SECRET
   );
@@ -16,7 +18,7 @@ export const generateTokens = (user) => {
   return accessToken;
 };
 
-export const loginController = (req, res) => {
+export const loginController = (req: Request, res: Response): void => {
   if (!req.body) {
     handleResponse(res, new Error("No data"), null, 400);
     return;
