@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 
 import {
   Typography,
@@ -6,14 +6,13 @@ import {
   TextField,
   Button,
   CircularProgress,
-  Snackbar,
 } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/styles";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import api from "../config/api";
 import AuthContext from "../context/AuthContext";
+import SnackContext from "../context/SnackContext";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -44,12 +43,7 @@ const Login = () => {
   const classes = useStyles();
 
   const { handleLogin } = useContext(AuthContext);
-
-  const [errorSnack, setErrorSnack] = useState({ open: false, message: "" });
-
-  const closeErrorSnack = () => {
-    setErrorSnack((prevState) => ({ ...prevState, open: false }));
-  };
+  const setSnackState = useContext(SnackContext);
 
   const form = useFormik({
     initialValues: {
@@ -66,10 +60,10 @@ const Login = () => {
     onSubmit: (values) => {
       return api
         .login(values.email, values.password)
+        .then(handleLogin)
         .catch((res) => {
-          setErrorSnack({ open: true, message: res.error });
-        })
-        .then(handleLogin);
+          setSnackState({ open: true, message: res.error, severity: "error" });
+        });
     },
   });
 
@@ -90,7 +84,7 @@ const Login = () => {
             onChange={form.handleChange}
             onBlur={form.handleBlur}
             value={form.values.email}
-            placeholder="E-mail address"
+            label="E-mail address"
           />
 
           <TextField
@@ -104,7 +98,7 @@ const Login = () => {
             onChange={form.handleChange}
             onBlur={form.handleBlur}
             value={form.values.password}
-            placeholder="Password"
+            label="Password"
           />
 
           <Button
@@ -116,15 +110,6 @@ const Login = () => {
           </Button>
         </form>
       </Paper>
-      <Snackbar
-        autoHideDuration={6000}
-        open={errorSnack.open}
-        onClose={closeErrorSnack}
-      >
-        <Alert onClose={closeErrorSnack} severity="error">
-          {errorSnack.message}
-        </Alert>
-      </Snackbar>
     </div>
   );
 };

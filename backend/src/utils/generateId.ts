@@ -6,7 +6,7 @@ const generateId = (storageKey: keyof typeof storage): number => {
       (storage[storageKey][storage[storageKey].length - 1].id as number) + 1
     );
   } else {
-    return 0;
+    return 1;
   }
 };
 

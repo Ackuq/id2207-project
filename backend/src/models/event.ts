@@ -6,6 +6,7 @@ interface EventTemplateArguments {
   budget: number;
   date: string;
   participants: string;
+  client: string;
 }
 
 class EventTemplate {
@@ -14,7 +15,9 @@ class EventTemplate {
   budget;
   date;
   participants;
+  client;
   constructor(values: EventTemplateArguments) {
+    this.client = values.client;
     this.description = values.description;
     this.type = values.type;
     this.budget = values.budget;
@@ -24,7 +27,6 @@ class EventTemplate {
 }
 
 export interface EventRequestArguments extends EventTemplateArguments {
-  status: string;
   reporter: string;
 }
 

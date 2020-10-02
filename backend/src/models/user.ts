@@ -6,6 +6,7 @@ interface UserParams {
   email: string;
   password: string;
   type: role;
+  name: string;
 }
 
 export class User {
@@ -13,10 +14,12 @@ export class User {
   id;
   email;
   password;
+  name;
   constructor(user: UserParams) {
     this.id = uuidv4();
     this.email = user.email;
     this.password = user.password;
+    this.name = user.name;
   }
 }
 

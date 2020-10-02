@@ -15,5 +15,6 @@ router
 
 // User requests
 router.route("/me").get(UserController.getMe);
+router.route("/user/:id").get(UserController.getUser);
 
 export default router;

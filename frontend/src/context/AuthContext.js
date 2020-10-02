@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Snackbar } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import React, { useContext, useEffect, useState } from "react";
+
 import api from "../config/api";
+import SnackContext from "./SnackContext";
 
 const AuthContext = React.createContext();
 
@@ -12,16 +12,7 @@ const initialState = {
 
 export const AuthContextProvider = ({ children }) => {
   const [authState, setAuthState] = useState(initialState);
-
-  const [snackState, setSnackState] = useState({
-    open: false,
-    message: "",
-    severity: "success",
-  });
-
-  const closeSnack = () => {
-    setSnackState((prevState) => ({ ...prevState, open: false }));
-  };
+  const setSnackState = useContext(SnackContext);
 
   const handleLogin = ({ data }) => {
     api.accessToken = data.accessToken;
@@ -59,15 +50,6 @@ export const AuthContextProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={{ ...authState, ...publicFunctions }}>
       {children}
-      <Snackbar
-        autoHideDuration={3000}
-        open={snackState.open}
-        onClose={closeSnack}
-      >
-        <Alert onClose={closeSnack} severity={snackState.severity}>
-          {snackState.message}
-        </Alert>
-      </Snackbar>
     </AuthContext.Provider>
   );
 };

@@ -32,7 +32,7 @@ export const editEventRequest = (req: Request, res: Response): void => {
 export const createEventRequest = (req: Request, res: Response): void => {
   try {
     const values = eventRequestSerializer(req);
-    const reporter = res.locals.user;
+    const reporter = res.locals.id;
     const eventRequest = new EventRequest({ ...values, reporter });
     storage.eventRequests.push(eventRequest);
     handleResponse(res, null, eventRequest, 201);

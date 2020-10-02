@@ -14,7 +14,8 @@ const api = {
       if (res.ok) {
         return res.json();
       } else {
-        throw await res.json();
+        const json = await res.json();
+        throw json;
       }
     });
   },
@@ -32,6 +33,25 @@ const api = {
 
   getMe: () => {
     return api.makeRequest("/v1/me");
+  },
+
+  createEventRequest: (values) => {
+    return api.makeRequest("/v1/eventRequest", {
+      method: "POST",
+      body: JSON.stringify(values),
+    });
+  },
+
+  getEventRequests: () => {
+    return api.makeRequest("/v1/eventRequest");
+  },
+
+  getEventRequest: (id) => {
+    return api.makeRequest(`/v1/eventRequest/${id}`);
+  },
+
+  getUser: (id) => {
+    return api.makeRequest(`/v1/user/${id}`);
   },
 };
 

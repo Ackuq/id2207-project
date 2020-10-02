@@ -8,11 +8,19 @@ export default (): void => {
       email: "customerservice@test.se",
       password: "password",
       type: role.customerService,
+      name: "CSTM1",
+    },
+    {
+      email: "customerservice2@test.se",
+      password: "password",
+      type: role.customerService,
+      name: "CSTM2",
     },
     {
       email: "scs@test.se",
       password: "password",
       type: role.seniorCustomerService,
+      name: "SCS",
     },
   ];
   users;
