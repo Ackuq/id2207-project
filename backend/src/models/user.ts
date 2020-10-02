@@ -29,7 +29,7 @@ class CustomerService extends User {
 }
 
 class SeniorCustomerService extends User {
-  views = [views.createEventRequest, views.eventRequests];
+  views = [views.eventRequests];
   constructor(user: UserParams) {
     super(user);
     this.role = role.seniorCustomerService;

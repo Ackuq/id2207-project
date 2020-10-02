@@ -1,10 +1,27 @@
 import React, { useContext } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import Login from "./views/Login";
 
 import AuthContext from "./context/AuthContext";
 
-const AuthRoutes = () => <Switch></Switch>;
+import Login from "./views/Login";
+import Dashboard from "./views/Dashboard";
+import CreateEventRequest from "./views/CreateEventRequest";
+import EventRequests from "./views/EventRequests";
+
+import * as routes from "./config/routes";
+
+const AuthRoutes = () => (
+  <Dashboard>
+    <Switch>
+      <Route exact path={routes.createEventRequest}>
+        <CreateEventRequest />
+      </Route>
+      <Route exact path={routes.eventRequests}>
+        <EventRequests />
+      </Route>
+    </Switch>
+  </Dashboard>
+);
 
 const NoAuthRoutes = () => (
   <Route>

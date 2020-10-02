@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 
 import {
   Typography,
@@ -6,10 +6,14 @@ import {
   TextField,
   Button,
   CircularProgress,
+  Snackbar,
 } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/styles";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import api from "../config/api";
+import AuthContext from "../context/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -39,6 +43,14 @@ const useStyles = makeStyles((theme) => ({
 const Login = () => {
   const classes = useStyles();
 
+  const { handleLogin } = useContext(AuthContext);
+
+  const [errorSnack, setErrorSnack] = useState({ open: false, message: "" });
+
+  const closeErrorSnack = () => {
+    setErrorSnack((prevState) => ({ ...prevState, open: false }));
+  };
+
   const form = useFormik({
     initialValues: {
       email: "",
@@ -52,9 +64,12 @@ const Login = () => {
         .required("Required"),
     }),
     onSubmit: (values) => {
-      console.log(values);
-
-      return Promise.resolve(true);
+      return api
+        .login(values.email, values.password)
+        .catch((res) => {
+          setErrorSnack({ open: true, message: res.error });
+        })
+        .then(handleLogin);
     },
   });
 
@@ -101,6 +116,15 @@ const Login = () => {
           </Button>
         </form>
       </Paper>
+      <Snackbar
+        autoHideDuration={6000}
+        open={errorSnack.open}
+        onClose={closeErrorSnack}
+      >
+        <Alert onClose={closeErrorSnack} severity="error">
+          {errorSnack.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

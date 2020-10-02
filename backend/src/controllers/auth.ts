@@ -23,6 +23,7 @@ export const loginController = (req: Request, res: Response): void => {
     handleResponse(res, new Error("No data"), null, 400);
     return;
   }
+
   const { email, password } = req.body;
   if (!email || !password) {
     handleResponse(

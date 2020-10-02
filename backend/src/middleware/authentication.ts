@@ -12,11 +12,11 @@ const authenticate = (
   if (authToken) {
     try {
       const {
-        data: { userId, role },
+        data: { id, userRole },
       } = jwt.verify(authToken, JWT_SECRET) as Record<string, any>;
 
-      res.locals.user = userId;
-      res.locals.role = role;
+      res.locals.id = id;
+      res.locals.userRole = userRole;
     } catch (error) {
       handleResponse(res, new Error(error.message), null, 401);
     }
