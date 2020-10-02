@@ -11,7 +11,7 @@ import { makeStyles } from "@material-ui/styles";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   container: {
     flex: 1,
     height: "100%",
@@ -34,7 +34,7 @@ const useStyles = makeStyles({
   formField: {
     marginBottom: "0.5rem",
   },
-});
+}));
 
 const Login = () => {
   const classes = useStyles();
