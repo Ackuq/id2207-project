@@ -40,6 +40,28 @@ export const handleEditEventRequest = (
       userRole === role.financialManager ||
       eventRequest.reporter === userId
     ) {
+      if (
+        newValues.budgetApproved &&
+        newValues.budgetApproved !== eventRequest.budgetApproved &&
+        userRole !== role.financialManager
+      ) {
+        throw {
+          error: new Error("Only financial manager can approve budget"),
+          status: 403,
+        };
+      }
+
+      if (
+        newValues.status &&
+        newValues.status !== eventRequest.status &&
+        userRole !== role.administrationManager
+      ) {
+        throw {
+          error: new Error("Only administration manager can change status"),
+          status: 403,
+        };
+      }
+
       const index = storage.eventRequests.findIndex((e) => e.id === eventId);
       const newEventRequest = { ...eventRequest, ...newValues };
       if (newEventRequest.status === "approved") {
@@ -80,11 +102,10 @@ export const handleEditEventRequest = (
 };
 
 export const handleCreateEventRequest = (
-  reporter: string,
   values: EventRequestArguments
 ): EventRequest => {
   try {
-    const eventRequest = new EventRequest({ ...values, reporter });
+    const eventRequest = new EventRequest(values);
     storage.eventRequests.push(eventRequest);
     return eventRequest;
   } catch (e) {

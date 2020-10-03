@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../utils/constants";
 import { handleResponse } from "../utils/responses";
+import role from "../utils/role";
 
 const authenticate = (
   req: Request,
@@ -13,7 +14,9 @@ const authenticate = (
     try {
       const {
         data: { id, userRole },
-      } = jwt.verify(authToken, JWT_SECRET) as Record<string, any>;
+      } = jwt.verify(authToken, JWT_SECRET) as Required<{
+        data: { id: string; userRole: role };
+      }>;
 
       res.locals.id = id;
       res.locals.userRole = userRole;

@@ -5,8 +5,14 @@ interface EventTemplateArguments {
   type: string;
   budget: number;
   date: string | Date;
-  participants: string;
+  participants: number;
   client: string;
+}
+
+export enum requestStatus {
+  pending = "pending",
+  approved = "approved",
+  cancelled = "cancelled",
 }
 
 class EventTemplate {
@@ -37,7 +43,7 @@ export interface EventRequestArguments extends EventTemplateArguments {
 }
 
 export class EventRequest extends EventTemplate {
-  status = "pending";
+  status: requestStatus = requestStatus.pending;
   id;
   reporter;
   budgetApproved = false;
@@ -49,13 +55,17 @@ export class EventRequest extends EventTemplate {
   }
 }
 
-interface EventProjectArguments extends EventTemplateArguments {
+export interface EventProjectArguments extends EventTemplateArguments {
   status: string;
   reporter: string;
 }
 
+export enum eventStatus {
+  pending = "planning",
+}
+
 export class EventProject extends EventTemplate {
-  status = "planning";
+  status: eventStatus = eventStatus.pending;
   id;
   reporter;
   tasks: Array<string> = [];

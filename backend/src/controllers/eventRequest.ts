@@ -44,7 +44,7 @@ export const createEventRequest = (req: Request, res: Response): void => {
   try {
     const values = eventRequestSerializer(req);
     const reporter = res.locals.id;
-    const eventRequest = handleCreateEventRequest(reporter, values);
+    const eventRequest = handleCreateEventRequest({ ...values, reporter });
     handleResponse(res, null, eventRequest, 201);
   } catch (e) {
     handleResponse(res, e.error, null, e.status);

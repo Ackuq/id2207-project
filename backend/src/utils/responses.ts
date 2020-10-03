@@ -4,7 +4,7 @@ interface Res {
   success: boolean;
   status: number;
   error?: string;
-  data?: any;
+  data?: unknown;
 }
 
 export const errorResponse = (error: Error, status: number): Res => ({
@@ -13,7 +13,7 @@ export const errorResponse = (error: Error, status: number): Res => ({
   error: error.message,
 });
 
-export const successResponse = (data: any, status: number): Res => ({
+export const successResponse = (data: unknown, status: number): Res => ({
   success: true,
   status,
   data,
@@ -22,7 +22,7 @@ export const successResponse = (data: any, status: number): Res => ({
 export const handleResponse = (
   res: Response,
   error: Error | null,
-  data: any,
+  data: unknown,
   status: number
 ): void => {
   const jsonResponse = error
