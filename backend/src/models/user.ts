@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import * as views from "../utils/views";
 import role from "../utils/role";
 
-interface UserParams {
+export interface UserParams {
   email: string;
   password: string;
   type: role;
@@ -23,7 +23,7 @@ export class User {
   }
 }
 
-class CustomerService extends User {
+export class CustomerService extends User {
   views = [views.createEventRequest, views.eventRequests];
   constructor(user: UserParams) {
     super(user);
@@ -31,7 +31,7 @@ class CustomerService extends User {
   }
 }
 
-class SeniorCustomerService extends User {
+export class SeniorCustomerService extends User {
   views = [views.eventRequests];
   constructor(user: UserParams) {
     super(user);
@@ -39,7 +39,7 @@ class SeniorCustomerService extends User {
   }
 }
 
-class AdministrationManager extends User {
+export class AdministrationManager extends User {
   views = [views.eventRequests];
   constructor(user: UserParams) {
     super(user);
@@ -47,7 +47,7 @@ class AdministrationManager extends User {
   }
 }
 
-class FinancialManager extends User {
+export class FinancialManager extends User {
   views = [views.eventRequests];
   constructor(user: UserParams) {
     super(user);

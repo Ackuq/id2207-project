@@ -1,0 +1,122 @@
+import {
+  EventProject,
+  EventRequest,
+  EventRequestArguments,
+} from "../models/event";
+import storage from "../storage";
+
+import role from "../utils/role";
+
+export const handleDeleteEventRequest = (
+  userRole: role,
+  userId: string,
+  eventId: number
+): EventRequest[] => {
+  const eventRequest = storage.eventRequests.find((e) => e.id === eventId);
+
+  if (!eventRequest) {
+    throw { error: new Error("Event request not found"), status: 404 };
+  }
+
+  if (userRole === role.customerService && eventRequest.reporter === userId) {
+    storage.eventRequests.filter((e) => e.id !== eventId);
+    return storage.eventRequests;
+  } else {
+    throw { error: new Error("Insufficient access"), status: 403 };
+  }
+};
+
+export const handleEditEventRequest = (
+  userRole: string,
+  userId: string,
+  eventId: number,
+  newValues: Partial<EventRequest>
+): EventRequest => {
+  const eventRequest = storage.eventRequests.find((e) => e.id === eventId);
+  if (eventRequest) {
+    if (
+      userRole === role.seniorCustomerService ||
+      userRole === role.administrationManager ||
+      userRole === role.financialManager ||
+      eventRequest.reporter === userId
+    ) {
+      const index = storage.eventRequests.findIndex((e) => e.id === eventId);
+      const newEventRequest = { ...eventRequest, ...newValues };
+      if (newEventRequest.status === "approved") {
+        if (!newEventRequest.budgetApproved) {
+          throw {
+            error: new Error("Cannot approve if budget is not approved"),
+            status: 400,
+          };
+        }
+        // Create a new event project if it becomes approved
+        const newEventProject = new EventProject(newEventRequest);
+        storage.eventProjects.push(newEventProject);
+      }
+
+      // Archive if cancelled or approved
+      if (
+        newEventRequest.status === "approved" ||
+        newEventRequest.status === "cancelled"
+      ) {
+        newEventRequest.archived = true;
+      }
+
+      storage.eventRequests[index] = newEventRequest;
+
+      return newEventRequest;
+    } else {
+      throw {
+        error: new Error("Insufficient access"),
+        status: 403,
+      };
+    }
+  } else {
+    throw {
+      error: new Error("Event request not found"),
+      status: 400,
+    };
+  }
+};
+
+export const handleCreateEventRequest = (
+  reporter: string,
+  values: EventRequestArguments
+): EventRequest => {
+  try {
+    const eventRequest = new EventRequest({ ...values, reporter });
+    storage.eventRequests.push(eventRequest);
+    return eventRequest;
+  } catch (e) {
+    throw { error: e, status: 400 };
+  }
+};
+
+export const handleGetEventRequests = (
+  userRole: string,
+  userId: string
+): Array<EventRequest> => {
+  if (
+    userRole === role.seniorCustomerService ||
+    userRole === role.financialManager ||
+    userRole === role.administrationManager
+  ) {
+    return storage.eventRequests;
+  } else if (userRole === role.customerService) {
+    const eventRequests = storage.eventRequests.filter(
+      (e) => e.reporter === userId
+    );
+    return eventRequests;
+  } else {
+    throw { error: new Error("Insufficient access"), status: 403 };
+  }
+};
+
+export const handleGetEventRequest = (eventId: number): EventRequest => {
+  const eventRequest = storage.eventRequests.find((e) => e.id === eventId);
+  if (eventRequest) {
+    return eventRequest;
+  } else {
+    throw { error: new Error("Event request not found"), status: 404 };
+  }
+};

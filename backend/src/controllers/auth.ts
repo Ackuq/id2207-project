@@ -1,22 +1,6 @@
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
-import { User } from "../models/user";
-import storage from "../storage";
-import { JWT_SECRET } from "../utils/constants";
+import { handleLogin } from "../handlers/auth";
 import { handleResponse } from "../utils/responses";
-
-export const generateTokens = (user: Required<User>): string => {
-  const { id, role } = user;
-  const accessToken = jwt.sign(
-    {
-      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 12,
-      data: { id, userRole: role },
-    },
-    JWT_SECRET
-  );
-
-  return accessToken;
-};
 
 export const loginController = (req: Request, res: Response): void => {
   if (!req.body) {
@@ -25,6 +9,7 @@ export const loginController = (req: Request, res: Response): void => {
   }
 
   const { email, password } = req.body;
+
   if (!email || !password) {
     handleResponse(
       res,
@@ -34,16 +19,11 @@ export const loginController = (req: Request, res: Response): void => {
     );
     return;
   }
-  const user = storage.users.find((u) => u.email === email);
 
-  if (user) {
-    if (password === user.password) {
-      const accessToken = generateTokens(user);
-      handleResponse(res, null, { accessToken, user }, 200);
-    } else {
-      handleResponse(res, new Error("Incorrect password"), null, 400);
-    }
-  } else {
-    handleResponse(res, new Error("No user found"), null, 404);
+  try {
+    const { accessToken, user } = handleLogin(email, password);
+    handleResponse(res, null, { accessToken, user }, 200);
+  } catch (e) {
+    handleResponse(res, e.error, null, e.message);
   }
 };

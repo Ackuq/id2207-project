@@ -4,7 +4,7 @@ interface EventTemplateArguments {
   description: string;
   type: string;
   budget: number;
-  date: string;
+  date: string | Date;
   participants: string;
   client: string;
 }
@@ -22,6 +22,11 @@ class EventTemplate {
     this.description = values.description;
     this.type = values.type;
     this.budget = values.budget;
+    if (typeof values.date === "string") {
+      this.date = new Date(values.date);
+    } else {
+      this.date = values.date;
+    }
     this.date = new Date(values.date);
     this.participants = values.participants;
   }

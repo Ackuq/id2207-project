@@ -8,6 +8,9 @@
     "esModuleInterop": true,
     "sourceMap": true,
     "strict": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "paths": {
+      "@App/*": ["src/*"]
+    }
   }
 }
