@@ -22,6 +22,18 @@ export default (): void => {
       type: role.seniorCustomerService,
       name: "SCS",
     },
+    {
+      email: "admin@test.se",
+      password: "password",
+      type: role.administrationManager,
+      name: "Admin",
+    },
+    {
+      email: "financial@test.se",
+      password: "password",
+      type: role.financialManager,
+      name: "Financial",
+    },
   ];
   users;
   try {

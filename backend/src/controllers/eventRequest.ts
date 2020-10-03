@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { EventRequest } from "../models/event";
+import { EventProject, EventRequest } from "../models/event";
 import { eventRequestSerializer } from "../serializers/events";
 import storage from "../storage";
 
@@ -33,10 +33,35 @@ export const editEventRequest = (req: Request, res: Response): void => {
   if (eventRequest) {
     if (
       userRole === role.seniorCustomerService ||
+      userRole === role.administrationManager ||
+      userRole === role.financialManager ||
       eventRequest.reporter === userId
     ) {
       const index = storage.eventRequests.findIndex((e) => e.id === id);
       const newEventRequest = { ...eventRequest, ...req.body };
+      if (newEventRequest.status === "approved") {
+        if (!newEventRequest.budgetApproved) {
+          handleResponse(
+            res,
+            new Error("Cannot approve if budget is not approved"),
+            null,
+            400
+          );
+          return;
+        }
+        // Create a new event project if it becomes approved
+        const newEventProject = new EventProject(newEventRequest);
+        storage.eventProjects.push(newEventProject);
+      }
+
+      // Archive if cancelled or approved
+      if (
+        newEventRequest.status === "approved" ||
+        newEventRequest.status === "cancelled"
+      ) {
+        newEventRequest.archived = true;
+      }
+
       storage.eventRequests[index] = newEventRequest;
       handleResponse(res, null, newEventRequest, 200);
     } else {
@@ -62,7 +87,11 @@ export const createEventRequest = (req: Request, res: Response): void => {
 export const getEventRequests = (req: Request, res: Response): void => {
   const { userRole, id } = res.locals;
 
-  if (userRole === role.seniorCustomerService) {
+  if (
+    userRole === role.seniorCustomerService ||
+    userRole === role.administrationManager ||
+    userRole === role.financialManager
+  ) {
     handleResponse(res, null, storage.eventRequests, 200);
   } else if (userRole === role.customerService) {
     const eventRequests = storage.eventRequests.filter(

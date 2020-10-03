@@ -16,6 +16,7 @@ class EventTemplate {
   date;
   participants;
   client;
+  archived = false;
   constructor(values: EventTemplateArguments) {
     this.client = values.client;
     this.description = values.description;
@@ -34,6 +35,7 @@ export class EventRequest extends EventTemplate {
   status = "pending";
   id;
   reporter;
+  budgetApproved = false;
 
   constructor(values: EventRequestArguments) {
     super(values);

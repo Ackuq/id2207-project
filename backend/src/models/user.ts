@@ -39,11 +39,31 @@ class SeniorCustomerService extends User {
   }
 }
 
+class AdministrationManager extends User {
+  views = [views.eventRequests];
+  constructor(user: UserParams) {
+    super(user);
+    this.role = role.administrationManager;
+  }
+}
+
+class FinancialManager extends User {
+  views = [views.eventRequests];
+  constructor(user: UserParams) {
+    super(user);
+    this.role = role.financialManager;
+  }
+}
+
 const userFactory = (user: UserParams): Required<User> => {
   if (user.type === role.customerService) {
     return new CustomerService(user);
   } else if (user.type === role.seniorCustomerService) {
     return new SeniorCustomerService(user);
+  } else if (user.type === role.financialManager) {
+    return new FinancialManager(user);
+  } else if (user.type === role.administrationManager) {
+    return new AdministrationManager(user);
   }
   throw new Error("Invalid user");
 };

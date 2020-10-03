@@ -3,8 +3,10 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import {
   Button,
+  Checkbox,
   CircularProgress,
   FormControl,
+  FormControlLabel,
   FormHelperText,
   InputLabel,
   makeStyles,
@@ -77,6 +79,7 @@ const EventRequestForm = ({ eventRequest, classes, id }) => {
         .string()
         .oneOf(["cancelled", "pending", "approved"], "Must be a valid status")
         .required("Required"),
+      budgetApproved: yup.boolean(),
     }),
 
     onSubmit: (values) => {
@@ -92,7 +95,7 @@ const EventRequestForm = ({ eventRequest, classes, id }) => {
         .catch((err) => {
           setSnackState({
             open: true,
-            message: err.message,
+            message: err.error,
             severity: "error",
           });
         });
@@ -113,6 +116,7 @@ const EventRequestForm = ({ eventRequest, classes, id }) => {
         onBlur={form.handleBlur}
         value={form.values.client}
         label="Client"
+        disabled={eventRequest.archived}
       />
 
       <TextField
@@ -128,6 +132,7 @@ const EventRequestForm = ({ eventRequest, classes, id }) => {
         onBlur={form.handleBlur}
         value={form.values.description}
         label="Description"
+        disabled={eventRequest.archived}
       />
 
       <TextField
@@ -141,6 +146,7 @@ const EventRequestForm = ({ eventRequest, classes, id }) => {
         onBlur={form.handleBlur}
         value={form.values.type}
         label="Type"
+        disabled={eventRequest.archived}
       />
 
       <TextField
@@ -157,6 +163,7 @@ const EventRequestForm = ({ eventRequest, classes, id }) => {
         InputLabelProps={{
           shrink: true,
         }}
+        disabled={eventRequest.archived}
       />
 
       <TextField
@@ -171,6 +178,7 @@ const EventRequestForm = ({ eventRequest, classes, id }) => {
         onBlur={form.handleBlur}
         value={form.values.participants}
         label="Participants"
+        disabled={eventRequest.archived}
       />
 
       <TextField
@@ -185,8 +193,24 @@ const EventRequestForm = ({ eventRequest, classes, id }) => {
         onBlur={form.handleBlur}
         value={form.values.budget}
         label="Budget"
+        disabled={eventRequest.archived}
       />
-
+      <FormControlLabel
+        control={
+          <Checkbox
+            disabled={
+              user.role !== roles.financialManager || eventRequest.archived
+            }
+            color="primary"
+            id="budgetApproved"
+            name="budgetApproved"
+            onChange={form.handleChange}
+            onBlur={form.handleBlur}
+            checked={form.values.budgetApproved}
+          />
+        }
+        label="Approve budget"
+      />
       <FormControl
         variant="filled"
         className={classes.formControl}
@@ -202,7 +226,9 @@ const EventRequestForm = ({ eventRequest, classes, id }) => {
           onBlur={form.handleBlur}
           onChange={form.handleChange}
           value={form.values.status}
-          disabled={user.role !== roles.seniorCustomerService}
+          disabled={
+            user.role !== roles.administrationManager || eventRequest.archived
+          }
         >
           <MenuItem value="pending">Pending</MenuItem>
           <MenuItem value="cancelled">Cancelled</MenuItem>
@@ -212,17 +238,18 @@ const EventRequestForm = ({ eventRequest, classes, id }) => {
           <FormHelperText>{form.errors.status}</FormHelperText>
         )}
       </FormControl>
-
-      <Button
-        disableRipple
-        color="primary"
-        style={{ marginTop: "1rem" }}
-        variant="contained"
-        type="submit"
-        disabled={!form.isValid || form.isSubmitting}
-      >
-        {form.isSubmitting ? <CircularProgress size={25} /> : "Update"}
-      </Button>
+      {!eventRequest.archived && (
+        <Button
+          disableRipple
+          color="primary"
+          style={{ marginTop: "1rem" }}
+          variant="contained"
+          type="submit"
+          disabled={!form.isValid || form.isSubmitting}
+        >
+          {form.isSubmitting ? <CircularProgress size={25} /> : "Update"}
+        </Button>
+      )}
     </form>
   );
 };
@@ -253,7 +280,9 @@ const EventRequest = () => {
 
   return (
     <Paper className={classes.card}>
-      <Typography variant="h4">Event Request #{id}</Typography>
+      <Typography variant="h4">
+        Event Request #{id} {eventRequest?.archived ? "[ARCHIVED]" : ""}
+      </Typography>
       <Typography variant="h5">Reporter: {reporter?.name ?? ""}</Typography>
       {eventRequest ? (
         <EventRequestForm
