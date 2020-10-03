@@ -1,7 +1,7 @@
 enum role {
   customerService = "customerService",
   seniorCustomerService = "seniorCustomerService",
-  administrationManager = "seniorCustomerService",
+  administrationManager = "administrationManager",
   financialManager = "financialManager",
 }
 

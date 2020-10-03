@@ -27,7 +27,7 @@ export const handleDeleteEventRequest = (
 };
 
 export const handleEditEventRequest = (
-  userRole: string,
+  userRole: role,
   userId: string,
   eventId: number,
   newValues: Partial<EventRequest>
@@ -41,7 +41,7 @@ export const handleEditEventRequest = (
       eventRequest.reporter === userId
     ) {
       if (
-        newValues.budgetApproved &&
+        newValues.budgetApproved !== undefined &&
         newValues.budgetApproved !== eventRequest.budgetApproved &&
         userRole !== role.financialManager
       ) {

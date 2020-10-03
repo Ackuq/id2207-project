@@ -24,6 +24,6 @@ export const loginController = (req: Request, res: Response): void => {
     const { accessToken, user } = handleLogin(email, password);
     handleResponse(res, null, { accessToken, user }, 200);
   } catch (e) {
-    handleResponse(res, e.error, null, e.message);
+    handleResponse(res, e.error, null, e.status);
   }
 };
