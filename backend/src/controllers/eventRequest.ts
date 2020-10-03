@@ -26,7 +26,25 @@ export const deleteEventRequest = (req: Request, res: Response): void => {
 };
 
 export const editEventRequest = (req: Request, res: Response): void => {
-  return;
+  const { userRole, id: userId } = res.locals;
+  const id = parseInt(req.params.id);
+
+  const eventRequest = storage.eventRequests.find((e) => e.id === id);
+  if (eventRequest) {
+    if (
+      userRole === role.seniorCustomerService ||
+      eventRequest.reporter === userId
+    ) {
+      const index = storage.eventRequests.findIndex((e) => e.id === id);
+      const newEventRequest = { ...eventRequest, ...req.body };
+      storage.eventRequests[index] = newEventRequest;
+      handleResponse(res, null, newEventRequest, 200);
+    } else {
+      handleResponse(res, new Error("Insufficient access"), null, 403);
+    }
+  } else {
+    handleResponse(res, new Error("Event request not found"), null, 400);
+  }
 };
 
 export const createEventRequest = (req: Request, res: Response): void => {

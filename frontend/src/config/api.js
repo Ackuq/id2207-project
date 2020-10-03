@@ -50,6 +50,13 @@ const api = {
     return api.makeRequest(`/v1/eventRequest/${id}`);
   },
 
+  updateEventRequest: (id, values) => {
+    return api.makeRequest(`/v1/eventRequest/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(values),
+    });
+  },
+
   getUser: (id) => {
     return api.makeRequest(`/v1/user/${id}`);
   },

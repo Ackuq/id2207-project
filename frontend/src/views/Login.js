@@ -102,6 +102,7 @@ const Login = () => {
           />
 
           <Button
+            color="primary"
             variant="contained"
             type="submit"
             disabled={!form.isValid || form.isSubmitting}

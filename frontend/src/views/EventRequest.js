@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import {
@@ -16,6 +16,9 @@ import {
 } from "@material-ui/core";
 import { useRouteMatch } from "react-router-dom";
 import api from "../config/api";
+import SnackContext from "../context/SnackContext";
+import AuthContext from "../context/AuthContext";
+import roles from "../config/roles";
 
 const formatDate = (date) => {
   let d = new Date(date),
@@ -50,7 +53,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventRequestForm = ({ eventRequest, classes }) => {
+const EventRequestForm = ({ eventRequest, classes, id }) => {
+  const { user } = useContext(AuthContext);
+  const setSnackState = useContext(SnackContext);
+
   const form = useFormik({
     initialValues: eventRequest,
     initialTouched: {
@@ -73,7 +79,24 @@ const EventRequestForm = ({ eventRequest, classes }) => {
         .required("Required"),
     }),
 
-    onSubmit: (values) => {},
+    onSubmit: (values) => {
+      return api
+        .updateEventRequest(id, values)
+        .then(() => {
+          setSnackState({
+            open: true,
+            message: "Event request updated",
+            severity: "success",
+          });
+        })
+        .catch((err) => {
+          setSnackState({
+            open: true,
+            message: err.message,
+            severity: "error",
+          });
+        });
+    },
   });
 
   return (
@@ -179,6 +202,7 @@ const EventRequestForm = ({ eventRequest, classes }) => {
           onBlur={form.handleBlur}
           onChange={form.handleChange}
           value={form.values.status}
+          disabled={user.role !== roles.seniorCustomerService}
         >
           <MenuItem value="pending">Pending</MenuItem>
           <MenuItem value="cancelled">Cancelled</MenuItem>
@@ -190,6 +214,8 @@ const EventRequestForm = ({ eventRequest, classes }) => {
       </FormControl>
 
       <Button
+        disableRipple
+        color="primary"
         style={{ marginTop: "1rem" }}
         variant="contained"
         type="submit"
@@ -230,7 +256,11 @@ const EventRequest = () => {
       <Typography variant="h4">Event Request #{id}</Typography>
       <Typography variant="h5">Reporter: {reporter?.name ?? ""}</Typography>
       {eventRequest ? (
-        <EventRequestForm classes={classes} eventRequest={eventRequest} />
+        <EventRequestForm
+          classes={classes}
+          eventRequest={eventRequest}
+          id={id}
+        />
       ) : (
         <CircularProgress />
       )}

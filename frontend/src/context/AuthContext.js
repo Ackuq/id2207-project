@@ -11,6 +11,7 @@ const initialState = {
 };
 
 export const AuthContextProvider = ({ children }) => {
+  const [loading, setLoading] = useState(true);
   const [authState, setAuthState] = useState(initialState);
   const setSnackState = useContext(SnackContext);
 
@@ -40,16 +41,23 @@ export const AuthContextProvider = ({ children }) => {
     const token = localStorage.getItem("token");
     if (token) {
       api.accessToken = token;
-      api.getMe().then((res) => {
-        setAuthState({ user: res.data, loggedIn: true });
-      });
+      api
+        .getMe()
+        .then((res) => {
+          setAuthState({ user: res.data, loggedIn: true });
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
     }
   }, []);
 
   const publicFunctions = { handleLogin, handleLogout };
   return (
     <AuthContext.Provider value={{ ...authState, ...publicFunctions }}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

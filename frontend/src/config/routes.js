@@ -3,6 +3,9 @@ export const eventRequests = "/eventRequests";
 export const eventRequest = "/eventRequests/:id";
 export const eventRequestUrl = (id) => `/eventRequests/${id}`;
 
+export const login = "/login";
+export const home = "/";
+
 export const routeToView = (route) => {
   switch (route) {
     case createEventRequest:
