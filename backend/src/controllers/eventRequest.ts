@@ -63,10 +63,12 @@ export const getEventRequests = (req: Request, res: Response): void => {
 };
 
 export const getEventRequest = (req: Request, res: Response): void => {
+  const { userRole, id: userId } = res.locals;
+
   const eventId = parseInt(req.params.id);
   if (eventId) {
     try {
-      const eventRequest = handleGetEventRequest(eventId);
+      const eventRequest = handleGetEventRequest(eventId, userRole, userId);
       handleResponse(res, null, eventRequest, 200);
     } catch (err) {
       handleResponse(res, err.error, null, err.status);

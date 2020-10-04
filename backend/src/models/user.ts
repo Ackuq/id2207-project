@@ -10,7 +10,7 @@ export interface UserParams {
 }
 
 export class User {
-  role = "undefined";
+  role = role.undefined;
   id;
   email;
   password;
@@ -40,7 +40,7 @@ export class SeniorCustomerService extends User {
 }
 
 export class AdministrationManager extends User {
-  views = [views.eventRequests];
+  views = [views.eventRequests, views.eventProjects];
   constructor(user: UserParams) {
     super(user);
     this.role = role.administrationManager;
@@ -48,10 +48,42 @@ export class AdministrationManager extends User {
 }
 
 export class FinancialManager extends User {
-  views = [views.eventRequests];
+  views = [views.eventRequests, views.eventProjects];
   constructor(user: UserParams) {
     super(user);
     this.role = role.financialManager;
+  }
+}
+
+export class ServiceTeamMember extends User {
+  views = [views.tasks];
+  constructor(user: UserParams) {
+    super(user);
+    this.role = role.serviceTeamMember;
+  }
+}
+
+export class ServiceManager extends User {
+  views = [views.tasks, views.eventProjects];
+  constructor(user: UserParams) {
+    super(user);
+    this.role = role.serviceManager;
+  }
+}
+
+export class ProductionTeamMember extends User {
+  views = [views.tasks];
+  constructor(user: UserParams) {
+    super(user);
+    this.role = role.productionTeamMember;
+  }
+}
+
+export class ProductionManager extends User {
+  views = [views.tasks, views.eventProjects];
+  constructor(user: UserParams) {
+    super(user);
+    this.role = role.productionManager;
   }
 }
 
@@ -64,6 +96,14 @@ const userFactory = (user: UserParams): Required<User> => {
     return new FinancialManager(user);
   } else if (user.type === role.administrationManager) {
     return new AdministrationManager(user);
+  } else if (user.type === role.productionTeamMember) {
+    return new ProductionTeamMember(user);
+  } else if (user.type === role.productionManager) {
+    return new ProductionManager(user);
+  } else if (user.type === role.serviceTeamMember) {
+    return new ServiceTeamMember(user);
+  } else if (user.type === role.serviceManager) {
+    return new ServiceManager(user);
   }
   throw new Error("Invalid user");
 };

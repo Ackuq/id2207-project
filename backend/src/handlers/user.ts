@@ -1,26 +1,19 @@
-import { Request, Response } from "express";
+import { User } from "../models/user";
 import storage from "../storage";
-import { handleResponse } from "../utils/responses";
+import role from "../utils/role";
 
-export const getMe = (req: Request, res: Response): void => {
-  const { id } = res.locals;
-
-  const user = storage.users.find((u) => u.id === id);
-  if (user) {
-    handleResponse(res, null, user, 200);
-  } else {
-    handleResponse(res, new Error("User not found"), null, 404);
+export const handleGetSubTeam = (userRole: role): Array<Required<User>> => {
+  if (userRole === role.productionManager) {
+    const subTeam = storage.users.filter(
+      (user) => user.role === role.productionTeamMember
+    );
+    return subTeam;
+  } else if (userRole === role.serviceManager) {
+    const subTeam = storage.users.filter(
+      (user) => user.role === role.serviceTeamMember
+    );
+    return subTeam;
   }
-};
 
-export const getUser = (req: Request, res: Response): void => {
-  const { id } = req.params;
-
-  const user = storage.users.find((u) => u.id === id);
-  if (user) {
-    const { id, email, name, role } = user;
-    handleResponse(res, null, { id, email, name, role }, 200);
-  } else {
-    handleResponse(res, new Error("User not found"), null, 404);
-  }
+  throw { error: new Error("Not a sub team manager"), status: 403 };
 };

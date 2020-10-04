@@ -63,6 +63,7 @@ const CreateEventRequest = () => {
       type: "",
       budget: 0,
     },
+    validateOnMount: true,
     validationSchema: yup.object({
       client: yup.string().required("Required"),
       participants: yup

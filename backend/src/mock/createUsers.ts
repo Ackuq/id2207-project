@@ -1,6 +1,8 @@
 import storage from "../storage";
 import createUser from "../models/user";
 import role from "../utils/role";
+import { EventRequest, requestStatus } from "../models/event";
+import { handleCreateEventProject } from "../handlers/eventProject";
 
 export default (): void => {
   const users = [
@@ -34,8 +36,32 @@ export default (): void => {
       type: role.financialManager,
       name: "Financial",
     },
+    {
+      email: "pm@test.se",
+      password: "password",
+      type: role.productionManager,
+      name: "Production Manager",
+    },
+    {
+      email: "ptm@test.se",
+      password: "password",
+      type: role.productionTeamMember,
+      name: "Production Team Member",
+    },
+    {
+      email: "sm@test.se",
+      password: "password",
+      type: role.serviceManager,
+      name: "Service Manager",
+    },
+    {
+      email: "stm@test.se",
+      password: "password",
+      type: role.serviceTeamMember,
+      name: "Service Team Member",
+    },
   ];
-  users;
+
   try {
     users.forEach((user) => {
       storage.users.push(createUser(user));
@@ -43,4 +69,23 @@ export default (): void => {
   } catch (e) {
     console.error(e);
   }
+
+  const eventRequest: EventRequest = {
+    archived: true,
+    budget: 100,
+    budgetApproved: true,
+    client: "bob",
+    date: new Date(),
+    description: "Some event",
+    id: 1,
+    participants: 100,
+    reporter:
+      storage.users.find((u) => u.role === role.customerService)?.id || "",
+    status: requestStatus.approved,
+    type: "IT",
+  };
+
+  storage.eventRequests.push(eventRequest);
+
+  handleCreateEventProject(eventRequest);
 };

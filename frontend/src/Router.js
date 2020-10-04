@@ -8,6 +8,10 @@ import Dashboard from "./views/Dashboard";
 import CreateEventRequest from "./views/CreateEventRequest";
 import EventRequests from "./views/EventRequests";
 import EventRequest from "./views/EventRequest";
+import EventProjects from "./views/EventProjects";
+import EventProject from "./views/EventProject";
+import Tasks from "./views/Tasks";
+import Task from "./views/Task";
 
 import * as routes from "./config/routes";
 
@@ -20,8 +24,20 @@ const AuthRoutes = () => (
       <Route exact path={routes.eventRequests}>
         <EventRequests />
       </Route>
-      <Route path={routes.eventRequest}>
+      <Route exact path={routes.eventRequest}>
         <EventRequest />
+      </Route>
+      <Route exact path={routes.eventProjects}>
+        <EventProjects />
+      </Route>
+      <Route exact path={routes.eventProject}>
+        <EventProject />
+      </Route>
+      <Route exact path={routes.tasks}>
+        <Tasks />
+      </Route>
+      <Route exact path={routes.task}>
+        <Task />
       </Route>
       <Route exact path={routes.home} />
       <Route>

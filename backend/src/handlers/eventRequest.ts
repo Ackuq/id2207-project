@@ -2,10 +2,12 @@ import {
   EventProject,
   EventRequest,
   EventRequestArguments,
+  requestStatus,
 } from "../models/event";
 import storage from "../storage";
 
 import role from "../utils/role";
+import { handleCreateEventProject } from "./eventProject";
 
 export const handleDeleteEventRequest = (
   userRole: role,
@@ -18,7 +20,7 @@ export const handleDeleteEventRequest = (
     throw { error: new Error("Event request not found"), status: 404 };
   }
 
-  if (userRole === role.customerService && eventRequest.reporter === userId) {
+  if (userRole === role.customerService || eventRequest.reporter === userId) {
     storage.eventRequests.filter((e) => e.id !== eventId);
     return storage.eventRequests;
   } else {
@@ -64,7 +66,7 @@ export const handleEditEventRequest = (
 
       const index = storage.eventRequests.findIndex((e) => e.id === eventId);
       const newEventRequest = { ...eventRequest, ...newValues };
-      if (newEventRequest.status === "approved") {
+      if (newEventRequest.status === requestStatus.approved) {
         if (!newEventRequest.budgetApproved) {
           throw {
             error: new Error("Cannot approve if budget is not approved"),
@@ -72,14 +74,13 @@ export const handleEditEventRequest = (
           };
         }
         // Create a new event project if it becomes approved
-        const newEventProject = new EventProject(newEventRequest);
-        storage.eventProjects.push(newEventProject);
+        handleCreateEventProject(newEventRequest);
       }
 
       // Archive if cancelled or approved
       if (
-        newEventRequest.status === "approved" ||
-        newEventRequest.status === "cancelled"
+        newEventRequest.status === requestStatus.approved ||
+        newEventRequest.status === requestStatus.cancelled
       ) {
         newEventRequest.archived = true;
       }
@@ -114,7 +115,7 @@ export const handleCreateEventRequest = (
 };
 
 export const handleGetEventRequests = (
-  userRole: string,
+  userRole: role,
   userId: string
 ): Array<EventRequest> => {
   if (
@@ -133,10 +134,25 @@ export const handleGetEventRequests = (
   }
 };
 
-export const handleGetEventRequest = (eventId: number): EventRequest => {
+export const handleGetEventRequest = (
+  eventId: number,
+  userRole: role,
+  userId: string
+): EventRequest => {
   const eventRequest = storage.eventRequests.find((e) => e.id === eventId);
   if (eventRequest) {
-    return eventRequest;
+    if (
+      userRole === role.seniorCustomerService ||
+      userRole === role.financialManager ||
+      userRole === role.administrationManager
+    )
+      return eventRequest;
+    else if (userRole === role.customerService) {
+      if (eventRequest.reporter === userId) {
+        return eventRequest;
+      }
+    }
+    throw { error: new Error("Insufficient access"), status: 403 };
   } else {
     throw { error: new Error("Event request not found"), status: 404 };
   }

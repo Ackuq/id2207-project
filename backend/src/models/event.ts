@@ -55,11 +55,6 @@ export class EventRequest extends EventTemplate {
   }
 }
 
-export interface EventProjectArguments extends EventTemplateArguments {
-  status: string;
-  reporter: string;
-}
-
 export enum eventStatus {
   pending = "planning",
 }
@@ -68,11 +63,11 @@ export class EventProject extends EventTemplate {
   status: eventStatus = eventStatus.pending;
   id;
   reporter;
-  tasks: Array<string> = [];
+  tasks: Array<number> = [];
 
-  constructor(values: EventProjectArguments) {
-    super(values);
+  constructor(request: EventRequest) {
+    super(request);
     this.id = generateId("eventProjects");
-    this.reporter = values.reporter;
+    this.reporter = request.reporter;
   }
 }
