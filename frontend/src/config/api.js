@@ -1,4 +1,4 @@
-const apiUrl = process.env.API_URL || "http://localhost:2000";
+const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:2000";
 
 const api = {
   accessToken: null,

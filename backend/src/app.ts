@@ -37,7 +37,7 @@ app.use(AUTH_ROUTE, AuthRouter);
 
 app.use(API_ROUTE, ApiRouter);
 
-const PORT = process.env.PORT || 2000;
+const PORT = process.env.API_PORT || 2000;
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
   console.log(`Server listening on port ${PORT}`);
