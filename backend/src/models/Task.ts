@@ -9,7 +9,9 @@ export enum priority {
 export enum taskStatus {
   pending = "pending",
   accepted = "accepted",
+  planCreated = "planCreated",
   completed = "completed",
+  rejected = "rejected",
 }
 
 export interface TaskArguments {

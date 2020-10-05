@@ -11,12 +11,12 @@ import {
 } from "../handlers/EventRequest";
 
 export const deleteEventRequest = (req: Request, res: Response): void => {
-  const { userRole, id: userId } = res.locals;
+  const { user } = res.locals;
 
   const eventId = parseInt(req.params.id);
 
   try {
-    const eventRequests = handleDeleteEventRequest(userRole, userId, eventId);
+    const eventRequests = handleDeleteEventRequest(user, eventId);
     handleResponse(res, null, eventRequests, 200);
   } catch (e) {
     handleResponse(res, e.error, null, e.status);
@@ -24,16 +24,11 @@ export const deleteEventRequest = (req: Request, res: Response): void => {
 };
 
 export const editEventRequest = (req: Request, res: Response): void => {
-  const { userRole, id: userId } = res.locals;
+  const { user } = res.locals;
   const eventId = parseInt(req.params.id);
 
   try {
-    const eventRequest = handleEditEventRequest(
-      userRole,
-      userId,
-      eventId,
-      req.body
-    );
+    const eventRequest = handleEditEventRequest(user, eventId, req.body);
     handleResponse(res, null, eventRequest, 200);
   } catch (e) {
     handleResponse(res, e.error, null, e.status);
@@ -43,8 +38,11 @@ export const editEventRequest = (req: Request, res: Response): void => {
 export const createEventRequest = (req: Request, res: Response): void => {
   try {
     const values = eventRequestSerializer(req);
-    const reporter = res.locals.id;
-    const eventRequest = handleCreateEventRequest({ ...values, reporter });
+    const { user } = res.locals;
+    const eventRequest = handleCreateEventRequest({
+      ...values,
+      reporter: user.id,
+    });
     handleResponse(res, null, eventRequest, 201);
   } catch (e) {
     handleResponse(res, e.error, null, e.status);
@@ -52,10 +50,10 @@ export const createEventRequest = (req: Request, res: Response): void => {
 };
 
 export const getEventRequests = (req: Request, res: Response): void => {
-  const { userRole, id } = res.locals;
+  const { user } = res.locals;
 
   try {
-    const eventRequests = handleGetEventRequests(userRole, id);
+    const eventRequests = handleGetEventRequests(user);
     handleResponse(res, null, eventRequests, 200);
   } catch (err) {
     handleResponse(res, err.error, null, err.status);
@@ -63,12 +61,12 @@ export const getEventRequests = (req: Request, res: Response): void => {
 };
 
 export const getEventRequest = (req: Request, res: Response): void => {
-  const { userRole, id: userId } = res.locals;
+  const { user } = res.locals;
 
   const eventId = parseInt(req.params.id);
   if (eventId) {
     try {
-      const eventRequest = handleGetEventRequest(eventId, userRole, userId);
+      const eventRequest = handleGetEventRequest(user, eventId);
       handleResponse(res, null, eventRequest, 200);
     } catch (err) {
       handleResponse(res, err.error, null, err.status);

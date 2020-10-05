@@ -1,9 +1,10 @@
 import { EventProject, EventRequest } from "../models/Event";
+import { User } from "../models/User";
 import storage from "../storage";
 import role from "../utils/role";
 
 export const handleDeleteEventProject = (
-  userRole: role,
+  user: Required<User>,
   eventId: number
 ): EventProject[] => {
   const eventProject = storage.eventProjects[eventId];
@@ -12,7 +13,7 @@ export const handleDeleteEventProject = (
     throw { error: new Error("Event request not found"), status: 404 };
   }
 
-  if (userRole === role.administrationManager) {
+  if (user.role === role.administrationManager) {
     delete storage.eventProjects[eventId];
     return Object.values(storage.eventProjects);
   } else {
@@ -21,7 +22,7 @@ export const handleDeleteEventProject = (
 };
 
 export const handleEditEventProject = (
-  userRole: role,
+  user: Required<User>,
   eventId: number,
   newValues: Partial<EventProject>
 ): EventProject => {
@@ -30,11 +31,10 @@ export const handleEditEventProject = (
     /**
      * TODO: add some more roles here
      */
-    if (userRole === role.administrationManager) {
-      const index = storage.eventRequests.findIndex((e) => e.id === eventId);
+    if (user.role === role.administrationManager) {
       const newEventProject = { ...eventProject, ...newValues };
 
-      storage.eventProjects[index] = newEventProject;
+      storage.eventProjects[eventId] = newEventProject;
 
       return newEventProject;
     }
@@ -61,13 +61,13 @@ export const handleCreateEventProject = (
 };
 
 export const handleGetEventProjects = (
-  userRole: string
+  user: Required<User>
 ): Array<EventProject> => {
   if (
-    userRole === role.serviceManager ||
-    userRole === role.productionManager ||
-    userRole === role.financialManager ||
-    userRole === role.administrationManager
+    user.role === role.serviceManager ||
+    user.role === role.productionManager ||
+    user.role === role.financialManager ||
+    user.role === role.administrationManager
   ) {
     return Object.values(storage.eventProjects);
   } else {
@@ -76,30 +76,29 @@ export const handleGetEventProjects = (
 };
 
 export const handleGetEventProject = (
-  eventId: number,
-  userRole: role,
-  userId: string
+  user: Required<User>,
+  eventId: number
 ): EventProject => {
   const eventProject = storage.eventProjects[eventId];
   if (eventProject) {
     if (
-      userRole === role.seniorCustomerService ||
-      userRole === role.financialManager ||
-      userRole === role.administrationManager ||
-      userRole === role.serviceManager ||
-      userRole === role.productionManager
+      user.role === role.seniorCustomerService ||
+      user.role === role.financialManager ||
+      user.role === role.administrationManager ||
+      user.role === role.serviceManager ||
+      user.role === role.productionManager
     )
       return eventProject;
     else if (
-      userRole === role.productionTeamMember ||
-      userRole === role.serviceTeamMember
+      user.role === role.productionTeamMember ||
+      user.role === role.serviceTeamMember
     ) {
       // Check if user got task in project
       const tasks = eventProject.tasks;
       const hasTaskInProject = tasks.some((taskId) => {
         const task = storage.tasks[taskId];
         if (task) {
-          return task.assignee === userId;
+          return task.assignee === user.id;
         } else {
           return false;
         }

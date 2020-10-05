@@ -4,7 +4,7 @@ import storage from "../storage";
 const addUser = (userDetails: UserParams): Required<User> => {
   const user = createUser(userDetails);
 
-  storage.users.push(user);
+  storage.users[user.id] = user;
 
   return user;
 };

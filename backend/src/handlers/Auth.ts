@@ -4,11 +4,11 @@ import storage from "../storage";
 import { JWT_SECRET } from "../utils/constants";
 
 export const generateTokens = (user: Required<User>): string => {
-  const { id, role } = user;
+  const { id } = user;
   const accessToken = jwt.sign(
     {
       exp: Math.floor(Date.now() / 1000) + 60 * 60 * 12,
-      data: { id, userRole: role },
+      data: { id },
     },
     JWT_SECRET
   );
@@ -20,7 +20,7 @@ export const handleLogin = (
   email: string,
   password: string
 ): { accessToken: string; user: Required<User> } => {
-  const user = storage.users.find((u) => u.email === email);
+  const user = Object.values(storage.users).find((u) => u.email === email);
 
   if (user) {
     if (password === user.password) {

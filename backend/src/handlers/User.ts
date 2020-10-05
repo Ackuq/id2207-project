@@ -2,14 +2,14 @@ import { User } from "../models/User";
 import storage from "../storage";
 import role from "../utils/role";
 
-export const handleGetSubTeam = (userRole: role): Array<Required<User>> => {
-  if (userRole === role.productionManager) {
-    const subTeam = storage.users.filter(
+export const handleGetSubTeam = (user: User): Array<Required<User>> => {
+  if (user.role === role.productionManager) {
+    const subTeam = Object.values(storage.users).filter(
       (user) => user.role === role.productionTeamMember
     );
     return subTeam;
-  } else if (userRole === role.serviceManager) {
-    const subTeam = storage.users.filter(
+  } else if (user.role === role.serviceManager) {
+    const subTeam = Object.values(storage.users).filter(
       (user) => user.role === role.serviceTeamMember
     );
     return subTeam;

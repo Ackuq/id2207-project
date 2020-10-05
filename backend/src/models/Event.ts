@@ -62,12 +62,10 @@ export enum eventStatus {
 export class EventProject extends EventTemplate {
   status: eventStatus = eventStatus.pending;
   id;
-  reporter;
   tasks: Array<number> = [];
 
-  constructor(request: EventRequest) {
+  constructor(request: EventTemplateArguments) {
     super(request);
     this.id = generateId("eventProjects");
-    this.reporter = request.reporter;
   }
 }

@@ -3,36 +3,56 @@ import { handleResponse } from "../utils/responses";
 import { taskSerializer } from "../serializers/tasks";
 import {
   handleCreateTask,
+  handleEditTask,
   handleGetEventTasks,
   handleGetTask,
   handleGetTasks,
 } from "../handlers/Tasks";
 
 export const createTask = (req: Request, res: Response): void => {
-  const { userRole } = res.locals;
+  const { user } = res.locals;
   const eventId = parseInt(req.params.id);
 
   if (eventId) {
-    const values = taskSerializer(req);
-    const reporter = res.locals.id;
-    const eventRequest = handleCreateTask(
-      { ...values, reporter },
-      eventId,
-      userRole
-    );
-    handleResponse(res, null, eventRequest, 201);
+    try {
+      const values = taskSerializer(req);
+      const task = handleCreateTask(user, {
+        ...values,
+        reporter: user.id,
+        project: eventId,
+      });
+      handleResponse(res, null, task, 201);
+    } catch (e) {
+      handleResponse(res, e.error, null, e.status);
+    }
+  } else {
+    handleResponse(res, new Error("No id defined"), null, 400);
+  }
+};
+
+export const editTask = (req: Request, res: Response): void => {
+  const { user } = res.locals;
+  const taskId = parseInt(req.params.id);
+
+  if (taskId) {
+    try {
+      const task = handleEditTask(user, req.body, taskId);
+      handleResponse(res, null, task, 201);
+    } catch (e) {
+      handleResponse(res, e.error, null, e.status);
+    }
   } else {
     handleResponse(res, new Error("No id defined"), null, 400);
   }
 };
 
 export const getEventTasks = (req: Request, res: Response): void => {
-  const { userRole } = res.locals;
+  const { user } = res.locals;
   const eventId = parseInt(req.params.id);
 
   if (eventId) {
     try {
-      const eventTasks = handleGetEventTasks(userRole, eventId);
+      const eventTasks = handleGetEventTasks(user, eventId);
 
       handleResponse(res, null, eventTasks, 200);
     } catch (e) {
@@ -44,10 +64,10 @@ export const getEventTasks = (req: Request, res: Response): void => {
 };
 
 export const getTasks = (req: Request, res: Response): void => {
-  const { userRole, id: userId } = res.locals;
+  const { user } = res.locals;
 
   try {
-    const eventTasks = handleGetTasks(userRole, userId);
+    const eventTasks = handleGetTasks(user);
 
     handleResponse(res, null, eventTasks, 200);
   } catch (e) {
@@ -56,11 +76,11 @@ export const getTasks = (req: Request, res: Response): void => {
 };
 
 export const getTask = (req: Request, res: Response): void => {
-  const { userRole, id: userId } = res.locals;
+  const { user } = res.locals;
   const taskId = parseInt(req.params.id);
 
   try {
-    const eventTasks = handleGetTask(userRole, userId, taskId);
+    const eventTasks = handleGetTask(user, taskId);
 
     handleResponse(res, null, eventTasks, 200);
   } catch (e) {

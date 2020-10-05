@@ -9,7 +9,7 @@
     "start:prod": "node build/app.js",
     "build": "tsc",
     "test": "jest",
-    "lint": "eslint src/ tests/ --ext js,ts"
+    "lint": "tsc --noEmit && eslint src/ tests/ --ext js,ts"
   },
   "author": "",
   "license": "ISC",

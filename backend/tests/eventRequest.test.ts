@@ -56,7 +56,7 @@ test("create and list event requests", () => {
 
   // Get the event request list and check that the new one is included
 
-  const eventRequestList = handleGetEventRequests(user.role, user.id);
+  const eventRequestList = handleGetEventRequests(user);
 
   expect(eventRequestList).toContain(eventRequest);
 });
@@ -115,38 +115,33 @@ test("event request access control", () => {
 
   // This should throw since budget isn't approved
   expect(() => {
-    handleEditEventRequest(admin.role, admin.id, eventRequest.id, {
+    handleEditEventRequest(admin, eventRequest.id, {
       status: requestStatus.approved,
     });
   }).toThrow();
 
   // This should throw since only financial manager can change budget
   expect(() => {
-    handleEditEventRequest(admin.role, admin.id, eventRequest.id, {
+    handleEditEventRequest(admin, eventRequest.id, {
       budgetApproved: true,
     });
   }).toThrow();
 
   // Approve budget
-  eventRequest = handleEditEventRequest(
-    financial.role,
-    financial.id,
-    eventRequest.id,
-    {
-      budgetApproved: true,
-    }
-  );
+  eventRequest = handleEditEventRequest(financial, eventRequest.id, {
+    budgetApproved: true,
+  });
 
   expect(eventRequest.budgetApproved).toBe(true);
 
   // This should throw since only administration manager can change status
   expect(() => {
-    handleEditEventRequest(financial.role, financial.id, eventRequest.id, {
+    handleEditEventRequest(financial, eventRequest.id, {
       status: requestStatus.approved,
     });
   }).toThrow();
 
-  eventRequest = handleEditEventRequest(admin.role, admin.id, eventRequest.id, {
+  eventRequest = handleEditEventRequest(admin, eventRequest.id, {
     status: requestStatus.approved,
   });
 

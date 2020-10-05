@@ -3,48 +3,47 @@ import {
   EventRequestArguments,
   requestStatus,
 } from "../models/Event";
+import { User } from "../models/User";
 import storage from "../storage";
 
 import role from "../utils/role";
 import { handleCreateEventProject } from "./EventProject";
 
 export const handleDeleteEventRequest = (
-  userRole: role,
-  userId: string,
+  user: Required<User>,
   eventId: number
 ): EventRequest[] => {
-  const eventRequest = storage.eventRequests.find((e) => e.id === eventId);
+  const eventRequest = storage.eventRequests[eventId];
 
   if (!eventRequest) {
     throw { error: new Error("Event request not found"), status: 404 };
   }
 
-  if (userRole === role.customerService || eventRequest.reporter === userId) {
-    storage.eventRequests.filter((e) => e.id !== eventId);
-    return storage.eventRequests;
+  if (user.role === role.customerService || eventRequest.reporter === user.id) {
+    delete storage.eventRequests[eventId];
+    return Object.values(storage.eventRequests);
   } else {
     throw { error: new Error("Insufficient access"), status: 403 };
   }
 };
 
 export const handleEditEventRequest = (
-  userRole: role,
-  userId: string,
+  user: Required<User>,
   eventId: number,
   newValues: Partial<EventRequest>
 ): EventRequest => {
-  const eventRequest = storage.eventRequests.find((e) => e.id === eventId);
+  const eventRequest = storage.eventRequests[eventId];
   if (eventRequest) {
     if (
-      userRole === role.seniorCustomerService ||
-      userRole === role.administrationManager ||
-      userRole === role.financialManager ||
-      eventRequest.reporter === userId
+      user.role === role.seniorCustomerService ||
+      user.role === role.administrationManager ||
+      user.role === role.financialManager ||
+      eventRequest.reporter === user.id
     ) {
       if (
         newValues.budgetApproved !== undefined &&
         newValues.budgetApproved !== eventRequest.budgetApproved &&
-        userRole !== role.financialManager
+        user.role !== role.financialManager
       ) {
         throw {
           error: new Error("Only financial manager can approve budget"),
@@ -55,7 +54,7 @@ export const handleEditEventRequest = (
       if (
         newValues.status &&
         newValues.status !== eventRequest.status &&
-        userRole !== role.administrationManager
+        user.role !== role.administrationManager
       ) {
         throw {
           error: new Error("Only administration manager can change status"),
@@ -63,7 +62,6 @@ export const handleEditEventRequest = (
         };
       }
 
-      const index = storage.eventRequests.findIndex((e) => e.id === eventId);
       const newEventRequest = { ...eventRequest, ...newValues };
       if (newEventRequest.status === requestStatus.approved) {
         if (!newEventRequest.budgetApproved) {
@@ -84,7 +82,7 @@ export const handleEditEventRequest = (
         newEventRequest.archived = true;
       }
 
-      storage.eventRequests[index] = newEventRequest;
+      storage.eventRequests[eventId] = newEventRequest;
 
       return newEventRequest;
     } else {
@@ -106,7 +104,7 @@ export const handleCreateEventRequest = (
 ): EventRequest => {
   try {
     const eventRequest = new EventRequest(values);
-    storage.eventRequests.push(eventRequest);
+    storage.eventRequests[eventRequest.id] = eventRequest;
     return eventRequest;
   } catch (e) {
     throw { error: e, status: 400 };
@@ -114,18 +112,17 @@ export const handleCreateEventRequest = (
 };
 
 export const handleGetEventRequests = (
-  userRole: role,
-  userId: string
+  user: Required<User>
 ): Array<EventRequest> => {
   if (
-    userRole === role.seniorCustomerService ||
-    userRole === role.financialManager ||
-    userRole === role.administrationManager
+    user.role === role.seniorCustomerService ||
+    user.role === role.financialManager ||
+    user.role === role.administrationManager
   ) {
-    return storage.eventRequests;
-  } else if (userRole === role.customerService) {
-    const eventRequests = storage.eventRequests.filter(
-      (e) => e.reporter === userId
+    return Object.values(storage.eventRequests);
+  } else if (user.role === role.customerService) {
+    const eventRequests = Object.values(storage.eventRequests).filter(
+      (e) => e.reporter === user.id
     );
     return eventRequests;
   } else {
@@ -134,20 +131,19 @@ export const handleGetEventRequests = (
 };
 
 export const handleGetEventRequest = (
-  eventId: number,
-  userRole: role,
-  userId: string
+  user: Required<User>,
+  eventId: number
 ): EventRequest => {
-  const eventRequest = storage.eventRequests.find((e) => e.id === eventId);
+  const eventRequest = storage.eventRequests[eventId];
   if (eventRequest) {
     if (
-      userRole === role.seniorCustomerService ||
-      userRole === role.financialManager ||
-      userRole === role.administrationManager
+      user.role === role.seniorCustomerService ||
+      user.role === role.financialManager ||
+      user.role === role.administrationManager
     )
       return eventRequest;
-    else if (userRole === role.customerService) {
-      if (eventRequest.reporter === userId) {
+    else if (user.role === role.customerService) {
+      if (eventRequest.reporter === user.id) {
         return eventRequest;
       }
     }

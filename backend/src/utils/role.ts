@@ -8,6 +8,7 @@ enum role {
   productionTeamMember = "productionTeamMember",
   serviceManager = "serviceManager",
   productionManager = "productionManager",
+  HR = "HR",
 }
 
 export default role;

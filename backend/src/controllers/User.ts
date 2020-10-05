@@ -4,9 +4,8 @@ import storage from "../storage";
 import { handleResponse } from "../utils/responses";
 
 export const getMe = (req: Request, res: Response): void => {
-  const { id } = res.locals;
+  const { user } = res.locals;
 
-  const user = storage.users.find((u) => u.id === id);
   if (user) {
     handleResponse(res, null, user, 200);
   } else {
@@ -17,7 +16,7 @@ export const getMe = (req: Request, res: Response): void => {
 export const getUser = (req: Request, res: Response): void => {
   const { id } = req.params;
 
-  const user = storage.users.find((u) => u.id === id);
+  const user = storage.users[id];
   if (user) {
     const { id, email, name, role } = user;
     handleResponse(res, null, { id, email, name, role }, 200);
@@ -27,10 +26,10 @@ export const getUser = (req: Request, res: Response): void => {
 };
 
 export const getSubTeam = (req: Request, res: Response): void => {
-  const { userRole } = res.locals;
+  const { user } = res.locals;
 
   try {
-    const subTeam = handleGetSubTeam(userRole);
+    const subTeam = handleGetSubTeam(user);
     handleResponse(res, null, subTeam, 200);
   } catch (e) {
     handleResponse(res, e.error, null, e.status);

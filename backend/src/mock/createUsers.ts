@@ -1,91 +1,20 @@
-import storage from "../storage";
-import createUser from "../models/User";
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import role from "../utils/role";
-import { EventRequest, requestStatus } from "../models/Event";
+import * as helpers from "../../tests/helpers";
 import { handleCreateEventProject } from "../handlers/EventProject";
 
 export default (): void => {
-  const users = [
-    {
-      email: "customerservice@test.se",
-      password: "password",
-      type: role.customerService,
-      name: "CSTM1",
-    },
-    {
-      email: "customerservice2@test.se",
-      password: "password",
-      type: role.customerService,
-      name: "CSTM2",
-    },
-    {
-      email: "scs@test.se",
-      password: "password",
-      type: role.seniorCustomerService,
-      name: "SCS",
-    },
-    {
-      email: "admin@test.se",
-      password: "password",
-      type: role.administrationManager,
-      name: "Admin",
-    },
-    {
-      email: "financial@test.se",
-      password: "password",
-      type: role.financialManager,
-      name: "Financial",
-    },
-    {
-      email: "pm@test.se",
-      password: "password",
-      type: role.productionManager,
-      name: "Production Manager",
-    },
-    {
-      email: "ptm@test.se",
-      password: "password",
-      type: role.productionTeamMember,
-      name: "Production Team Member",
-    },
-    {
-      email: "sm@test.se",
-      password: "password",
-      type: role.serviceManager,
-      name: "Service Manager",
-    },
-    {
-      email: "stm@test.se",
-      password: "password",
-      type: role.serviceTeamMember,
-      name: "Service Team Member",
-    },
-  ];
+  const _customerService = helpers.createUser(role.customerService);
+  const _seniorCustomerService = helpers.createUser(role.seniorCustomerService);
+  const _administrationManager = helpers.createUser(role.administrationManager);
+  const _HR = helpers.createUser(role.HR);
+  const _financialManager = helpers.createUser(role.financialManager);
+  const _productionManager = helpers.createUser(role.productionManager);
+  const _productionTeamMember = helpers.createUser(role.productionTeamMember);
+  const _serviceManager = helpers.createUser(role.serviceManager);
+  const _serviceTeamMember = helpers.createUser(role.serviceTeamMember);
 
-  try {
-    users.forEach((user) => {
-      storage.users.push(createUser(user));
-    });
-  } catch (e) {
-    console.error(e);
-  }
+  const _eventRequest = helpers.createEventRequest(_customerService);
 
-  const eventRequest: EventRequest = {
-    archived: true,
-    budget: 100,
-    budgetApproved: true,
-    client: "bob",
-    date: new Date(),
-    description: "Some event",
-    id: 1,
-    participants: 100,
-    reporter:
-      storage.users.find((u) => u.role === role.customerService)?.id || "",
-    status: requestStatus.approved,
-    type: "IT",
-  };
-
-  storage.eventRequests.push(eventRequest);
-
-  handleCreateEventProject(eventRequest);
+  const _project = helpers.createProject();
 };
