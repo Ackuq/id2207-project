@@ -52,7 +52,7 @@ export const handleEditEventRequest = (
       }
 
       if (
-        newValues.status &&
+        newValues.status !== undefined &&
         newValues.status !== eventRequest.status &&
         user.role !== role.administrationManager
       ) {

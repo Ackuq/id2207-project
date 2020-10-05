@@ -33,6 +33,7 @@ export const handleEditFinancialRequest = (
     financialRequest.reporter === user.id
   ) {
     if (
+      values.status !== undefined &&
       values.status !== financialRequest.status &&
       user.role !== role.financialManager
     ) {

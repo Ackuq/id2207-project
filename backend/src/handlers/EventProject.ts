@@ -28,9 +28,6 @@ export const handleEditEventProject = (
 ): EventProject => {
   const eventProject = storage.eventProjects[eventId];
   if (eventProject) {
-    /**
-     * TODO: add some more roles here
-     */
     if (user.role === role.administrationManager) {
       const newEventProject = { ...eventProject, ...newValues };
 
