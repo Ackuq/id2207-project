@@ -1,4 +1,4 @@
-import createUser, { User, UserParams } from "../models/user";
+import createUser, { User, UserParams } from "../models/User";
 import storage from "../storage";
 
 const addUser = (userDetails: UserParams): Required<User> => {

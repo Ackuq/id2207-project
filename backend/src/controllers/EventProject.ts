@@ -6,7 +6,7 @@ import {
   handleEditEventProject,
   handleGetEventProject,
   handleGetEventProjects,
-} from "../handlers/eventProject";
+} from "../handlers/EventProject";
 
 export const deleteEventProject = (req: Request, res: Response): void => {
   const { userRole } = res.locals;

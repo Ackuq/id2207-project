@@ -8,7 +8,7 @@ import {
   handleEditEventRequest,
   handleGetEventRequests,
   handleGetEventRequest,
-} from "../handlers/eventRequest";
+} from "../handlers/EventRequest";
 
 export const deleteEventRequest = (req: Request, res: Response): void => {
   const { userRole, id: userId } = res.locals;

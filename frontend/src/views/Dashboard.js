@@ -9,6 +9,7 @@ import {
   makeStyles,
   Toolbar,
   ListItemText,
+  Typography,
 } from "@material-ui/core";
 import AuthContext from "../context/AuthContext";
 import { viewInfo } from "../config/views";
@@ -36,6 +37,13 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
     padding: theme.spacing(3),
+  },
+
+  userInfo: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    textAlign: "center",
   },
 }));
 
@@ -67,7 +75,10 @@ const Dashboard = ({ children }) => {
           paper: classes.drawerPaper,
         }}
       >
-        <div className={classes.toolbar}></div>
+        <div className={`${classes.toolbar} ${classes.userInfo}`}>
+          <Typography variant="body2">User: {user.name}</Typography>
+          <Typography variant="body2">Role: {user.role}</Typography>
+        </div>
         <Divider />
         <List>
           {views.map((view) => (

@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { TaskArguments } from "../models/task";
+import { TaskArguments } from "../models/Task";
 
 const genError = (message: string) => ({
   error: new Error(message),

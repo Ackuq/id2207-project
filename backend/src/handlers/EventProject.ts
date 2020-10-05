@@ -1,4 +1,4 @@
-import { EventProject, EventRequest } from "../models/event";
+import { EventProject, EventRequest } from "../models/Event";
 import storage from "../storage";
 import role from "../utils/role";
 

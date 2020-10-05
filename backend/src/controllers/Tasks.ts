@@ -6,7 +6,7 @@ import {
   handleGetEventTasks,
   handleGetTask,
   handleGetTasks,
-} from "../handlers/tasks";
+} from "../handlers/Tasks";
 
 export const createTask = (req: Request, res: Response): void => {
   const { userRole } = res.locals;

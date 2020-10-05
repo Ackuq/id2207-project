@@ -1,8 +1,8 @@
 import express from "express";
-import * as UserController from "../controllers/user";
-import * as EventRequestController from "../controllers/eventRequest";
-import * as EventProjectController from "../controllers/eventProject";
-import * as TaskController from "../controllers/tasks";
+import * as UserController from "../controllers/User";
+import * as EventRequestController from "../controllers/EventRequest";
+import * as EventProjectController from "../controllers/EventProject";
+import * as TaskController from "../controllers/Tasks";
 
 const router = express.Router();
 

@@ -1,13 +1,12 @@
 import {
-  EventProject,
   EventRequest,
   EventRequestArguments,
   requestStatus,
-} from "../models/event";
+} from "../models/Event";
 import storage from "../storage";
 
 import role from "../utils/role";
-import { handleCreateEventProject } from "./eventProject";
+import { handleCreateEventProject } from "./EventProject";
 
 export const handleDeleteEventRequest = (
   userRole: role,

@@ -2,13 +2,13 @@ import {
   handleCreateEventRequest,
   handleEditEventRequest,
   handleGetEventRequests,
-} from "../src/handlers/eventRequest";
+} from "../src/handlers/EventRequest";
 import {
   EventRequest,
   EventRequestArguments,
   requestStatus,
-} from "../src/models/event";
-import { UserParams } from "../src/models/user";
+} from "../src/models/Event";
+import { UserParams } from "../src/models/User";
 import addUser from "../src/utils/addUser";
 import role from "../src/utils/role";
 

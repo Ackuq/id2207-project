@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { handleLogin } from "../handlers/auth";
+import { handleLogin } from "../handlers/Auth";
 import { handleResponse } from "../utils/responses";
 
 export const loginController = (req: Request, res: Response): void => {

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { handleGetSubTeam } from "../handlers/user";
+import { handleGetSubTeam } from "../handlers/User";
 import storage from "../storage";
 import { handleResponse } from "../utils/responses";
 

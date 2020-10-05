@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { EventRequestArguments } from "../models/event";
+import { EventRequestArguments } from "../models/Event";
 
 const genError = (message: string) => ({
   error: new Error(message),

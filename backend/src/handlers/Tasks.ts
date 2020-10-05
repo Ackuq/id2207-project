@@ -1,4 +1,4 @@
-import { Task, TaskArguments } from "../models/task";
+import { Task, TaskArguments } from "../models/Task";
 import storage from "../storage";
 import role from "../utils/role";
 

@@ -1,6 +1,6 @@
-import { EventProject, EventRequest } from "./models/event";
-import { Task } from "./models/task";
-import { User } from "./models/user";
+import { EventProject, EventRequest } from "./models/Event";
+import { Task } from "./models/Task";
+import { User } from "./models/User";
 
 interface Storage {
   eventRequests: Array<EventRequest>;

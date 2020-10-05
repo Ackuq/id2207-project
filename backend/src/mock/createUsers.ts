@@ -1,8 +1,8 @@
 import storage from "../storage";
-import createUser from "../models/user";
+import createUser from "../models/User";
 import role from "../utils/role";
-import { EventRequest, requestStatus } from "../models/event";
-import { handleCreateEventProject } from "../handlers/eventProject";
+import { EventRequest, requestStatus } from "../models/Event";
+import { handleCreateEventProject } from "../handlers/EventProject";
 
 export default (): void => {
   const users = [
