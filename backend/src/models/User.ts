@@ -87,6 +87,14 @@ export class ProductionManager extends User {
   }
 }
 
+export class HR extends User {
+  views = [views.recruitmentRequest];
+  constructor(user: UserParams) {
+    super(user);
+    this.role = role.HR;
+  }
+}
+
 const userFactory = (user: UserParams): Required<User> => {
   if (user.type === role.customerService) {
     return new CustomerService(user);
@@ -104,6 +112,8 @@ const userFactory = (user: UserParams): Required<User> => {
     return new ServiceTeamMember(user);
   } else if (user.type === role.serviceManager) {
     return new ServiceManager(user);
+  } else if (user.type === role.HR) {
+    return new HR(user);
   }
   throw new Error("Invalid user");
 };

@@ -29,7 +29,11 @@ export const handleEditRecruitmentRequest = (
 ): RecruitmentRequest => {
   const recruitmentRequest = storage.recruitmentRequests[recruitmentRequestId];
   if (user.role === role.HR || recruitmentRequest.reporter === user.id) {
-    if (values.status !== recruitmentRequest.status && user.role !== role.HR) {
+    if (
+      values.status !== undefined &&
+      values.status !== recruitmentRequest.status &&
+      user.role !== role.HR
+    ) {
       throw { error: new Error("Only HR can set status"), status: 403 };
     }
 

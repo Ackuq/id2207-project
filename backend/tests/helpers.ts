@@ -1,4 +1,5 @@
 import { EventProject, EventRequest } from "../src/models/Event";
+import { RecruitmentRequest } from "../src/models/RecruitmentRequest";
 import userFactory, { User } from "../src/models/User";
 import storage from "../src/storage";
 import role from "../src/utils/role";
@@ -39,4 +40,19 @@ export const createProject = (): EventProject => {
   });
   storage.eventProjects[eventProject.id] = eventProject;
   return eventProject;
+};
+
+export const createRecruitmentRequest = (
+  reporter: Required<User>
+): RecruitmentRequest => {
+  const recruitmentRequest = new RecruitmentRequest({
+    department: "production",
+    description: "asd",
+    reporter: reporter.id,
+    experience: 3,
+    position: "Chef",
+  });
+
+  storage.recruitmentRequests[recruitmentRequest.id] = recruitmentRequest;
+  return recruitmentRequest;
 };
