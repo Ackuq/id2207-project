@@ -4,6 +4,7 @@ export const eventProjects = "eventProjects";
 export const tasks = "tasks";
 
 export const financialRequests = "financialRequests";
+export const createFinancialRequest = "createFinancialRequest";
 
 export const createRecruitmentRequest = "createRecruitmentRequest";
-export const recruitmentRequest = "recruitmentRequest";
+export const recruitmentRequests = "recruitmentRequests";

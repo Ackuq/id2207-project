@@ -12,6 +12,12 @@ import EventProjects from "./views/EventProjects";
 import EventProject from "./views/EventProject";
 import Tasks from "./views/Tasks";
 import Task from "./views/Task";
+import RecruitmentRequests from "./views/RecruitmentRequests";
+import CreateRecruitmentRequest from "./views/CreateRecruitmentRequest";
+import RecruitmentRequest from "./views/RecruitmentRequest";
+import FinancialRequests from "./views/FinancialRequests";
+import CreateFinancialRequest from "./views/CreateFinancialRequest";
+import FinancialRequest from "./views/FinancialRequest";
 
 import * as routes from "./config/routes";
 
@@ -38,6 +44,24 @@ const AuthRoutes = () => (
       </Route>
       <Route exact path={routes.task}>
         <Task />
+      </Route>
+      <Route exact path={routes.createRecruitmentRequest}>
+        <CreateRecruitmentRequest />
+      </Route>
+      <Route exact path={routes.recruitmentRequests}>
+        <RecruitmentRequests />
+      </Route>
+      <Route exact path={routes.recruitmentRequest}>
+        <RecruitmentRequest />
+      </Route>
+      <Route exact path={routes.financialRequests}>
+        <FinancialRequests />
+      </Route>
+      <Route exact path={routes.financialRequest}>
+        <FinancialRequest />
+      </Route>
+      <Route exact path={routes.createFinancialRequest}>
+        <CreateFinancialRequest />
       </Route>
       <Route exact path={routes.home} />
       <Route>

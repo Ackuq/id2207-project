@@ -105,6 +105,50 @@ const api = {
       body: JSON.stringify(values),
     });
   },
+
+  getRecruitmentRequests: () => {
+    return api.makeRequest("/v1/recruitmentRequest");
+  },
+
+  getRecruitmentRequest: (id) => {
+    return api.makeRequest(`/v1/recruitmentRequest/${id}`);
+  },
+
+  updateRecruitmentRequest: (id, values) => {
+    return api.makeRequest(`/v1/recruitmentRequest/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(values),
+    });
+  },
+
+  createRecruitmentRequest: (values) => {
+    return api.makeRequest("/v1/recruitmentRequest", {
+      method: "POST",
+      body: JSON.stringify(values),
+    });
+  },
+
+  getFinancialRequests: () => {
+    return api.makeRequest("/v1/financialRequest");
+  },
+
+  getFinancialRequest: (id) => {
+    return api.makeRequest(`/v1/financialRequest/${id}`);
+  },
+
+  updateFinancialRequest: (id, values) => {
+    return api.makeRequest(`/v1/financialRequest/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(values),
+    });
+  },
+
+  createFinancialRequest: (values) => {
+    return api.makeRequest("/v1/financialRequest", {
+      method: "POST",
+      body: JSON.stringify(values),
+    });
+  },
 };
 
 export default api;

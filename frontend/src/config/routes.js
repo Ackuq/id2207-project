@@ -12,6 +12,18 @@ export const tasks = "/tasks";
 export const task = "/tasks/:id";
 export const taskUrl = (id) => `/tasks/${id}`;
 
+export const createRecruitmentRequest = "/createRecruitmentRequest";
+
+export const recruitmentRequests = "/recruitmentRequests";
+export const recruitmentRequest = "/recruitmentRequests/:id";
+export const recruitmentRequestUrl = (id) => `/recruitmentRequests/${id}`;
+
+export const createFinancialRequest = "/createFinancialRequest";
+
+export const financialRequests = "/financialRequests";
+export const financialRequest = "/financialRequests/:id";
+export const financialRequestUrl = (id) => `/financialRequests/${id}`;
+
 export const login = "/login";
 export const home = "/";
 

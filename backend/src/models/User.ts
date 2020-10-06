@@ -48,7 +48,7 @@ export class AdministrationManager extends User {
 }
 
 export class FinancialManager extends User {
-  views = [views.eventRequests, views.eventProjects];
+  views = [views.eventRequests, views.eventProjects, views.financialRequests];
   constructor(user: UserParams) {
     super(user);
     this.role = role.financialManager;
@@ -64,7 +64,14 @@ export class ServiceTeamMember extends User {
 }
 
 export class ServiceManager extends User {
-  views = [views.tasks, views.eventProjects];
+  views = [
+    views.tasks,
+    views.eventProjects,
+    views.createFinancialRequest,
+    views.financialRequests,
+    views.createRecruitmentRequest,
+    views.recruitmentRequests,
+  ];
   constructor(user: UserParams) {
     super(user);
     this.role = role.serviceManager;
@@ -80,7 +87,14 @@ export class ProductionTeamMember extends User {
 }
 
 export class ProductionManager extends User {
-  views = [views.tasks, views.eventProjects];
+  views = [
+    views.tasks,
+    views.eventProjects,
+    views.createFinancialRequest,
+    views.financialRequests,
+    views.createRecruitmentRequest,
+    views.recruitmentRequests,
+  ];
   constructor(user: UserParams) {
     super(user);
     this.role = role.productionManager;
@@ -88,7 +102,7 @@ export class ProductionManager extends User {
 }
 
 export class HR extends User {
-  views = [views.recruitmentRequest];
+  views = [views.recruitmentRequests];
   constructor(user: UserParams) {
     super(user);
     this.role = role.HR;
