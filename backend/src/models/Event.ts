@@ -19,7 +19,7 @@ class EventTemplate {
   description;
   type;
   budget;
-  date;
+  date: Date | string;
   participants;
   client;
   archived = false;

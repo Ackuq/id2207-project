@@ -52,6 +52,10 @@ If you want to start the application with predefined user for each possible role
 
 All of the mock users have password set to `password`
 
+### Persistent storage
+
+Although this project does not include a proper solution for persistent storage, you can create an **initial** storage by creating a file `storage.json` inside the `backend/` directory. When the server starts it will parse the data specified and create a replica of it as its initial store. An example of how this could look like is located in `backend/storage.example.json`. Simply run `cp backend/storage.example.json backend/storage.json` to use the example directly
+
 ## Tests
 
 There are multiple tests for the backend which are developed using `jest`, they are located under `backend/tests/`.

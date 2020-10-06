@@ -1,0 +1,140 @@
+{
+    "eventRequests": {
+        "1": {
+            "archived": false,
+            "client": "bob",
+            "description": "",
+            "type": "test",
+            "budget": 1000,
+            "date": "2020-10-06T20:35:03.228Z",
+            "participants": 1000,
+            "status": "pending",
+            "budgetApproved": false,
+            "id": 1,
+            "reporter": "958e0ea5-0d88-4d8b-a7b9-84d18d314669"
+        }
+    },
+    "eventProjects": {
+        "1": {
+            "archived": false,
+            "client": "Bob",
+            "description": "",
+            "type": "test",
+            "budget": 1000,
+            "date": "2020-10-06T20:35:03.229Z",
+            "participants": 1000,
+            "status": "planning",
+            "tasks": [],
+            "id": 1
+        }
+    },
+    "tasks": {},
+    "users": {
+        "958e0ea5-0d88-4d8b-a7b9-84d18d314669": {
+            "role": "customerService",
+            "id": "958e0ea5-0d88-4d8b-a7b9-84d18d314669",
+            "email": "customerService@test.se",
+            "password": "password",
+            "name": "customerService",
+            "views": [
+                "createEventRequest",
+                "eventRequests"
+            ]
+        },
+        "fe8b5018-f41a-40a9-a42c-1646ab1e9a46": {
+            "role": "seniorCustomerService",
+            "id": "fe8b5018-f41a-40a9-a42c-1646ab1e9a46",
+            "email": "seniorCustomerService@test.se",
+            "password": "password",
+            "name": "seniorCustomerService",
+            "views": [
+                "eventRequests"
+            ]
+        },
+        "863ef5c3-aaf0-4f20-8a85-ecf1210687cd": {
+            "role": "administrationManager",
+            "id": "863ef5c3-aaf0-4f20-8a85-ecf1210687cd",
+            "email": "administrationManager@test.se",
+            "password": "password",
+            "name": "administrationManager",
+            "views": [
+                "eventRequests",
+                "eventProjects"
+            ]
+        },
+        "51ed4c25-b8cf-49f3-8b0f-a1de2cbcc8ff": {
+            "role": "HR",
+            "id": "51ed4c25-b8cf-49f3-8b0f-a1de2cbcc8ff",
+            "email": "HR@test.se",
+            "password": "password",
+            "name": "HR",
+            "views": [
+                "recruitmentRequests"
+            ]
+        },
+        "9db6682a-7635-40c8-be11-f9260cc6cc34": {
+            "role": "financialManager",
+            "id": "9db6682a-7635-40c8-be11-f9260cc6cc34",
+            "email": "financialManager@test.se",
+            "password": "password",
+            "name": "financialManager",
+            "views": [
+                "eventRequests",
+                "eventProjects",
+                "financialRequests"
+            ]
+        },
+        "0d1f0b2e-189e-4e97-912e-f0edd766e103": {
+            "role": "productionManager",
+            "id": "0d1f0b2e-189e-4e97-912e-f0edd766e103",
+            "email": "productionManager@test.se",
+            "password": "password",
+            "name": "productionManager",
+            "views": [
+                "tasks",
+                "eventProjects",
+                "createFinancialRequest",
+                "financialRequests",
+                "createRecruitmentRequest",
+                "recruitmentRequests"
+            ]
+        },
+        "6973bef3-6caf-4b66-9f6d-ec2438aa57fb": {
+            "role": "productionTeamMember",
+            "id": "6973bef3-6caf-4b66-9f6d-ec2438aa57fb",
+            "email": "productionTeamMember@test.se",
+            "password": "password",
+            "name": "productionTeamMember",
+            "views": [
+                "tasks"
+            ]
+        },
+        "6bfe804a-be8a-472b-8bf8-5d3fcd2901a1": {
+            "role": "serviceManager",
+            "id": "6bfe804a-be8a-472b-8bf8-5d3fcd2901a1",
+            "email": "serviceManager@test.se",
+            "password": "password",
+            "name": "serviceManager",
+            "views": [
+                "tasks",
+                "eventProjects",
+                "createFinancialRequest",
+                "financialRequests",
+                "createRecruitmentRequest",
+                "recruitmentRequests"
+            ]
+        },
+        "703a0ac3-df61-48a0-9ebd-67758b351edb": {
+            "role": "serviceTeamMember",
+            "id": "703a0ac3-df61-48a0-9ebd-67758b351edb",
+            "email": "serviceTeamMember@test.se",
+            "password": "password",
+            "name": "serviceTeamMember",
+            "views": [
+                "tasks"
+            ]
+        }
+    },
+    "recruitmentRequests": {},
+    "financialRequests": {}
+}
