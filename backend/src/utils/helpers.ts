@@ -2,11 +2,11 @@ import {
   EventProject,
   EventRequest,
   EventTemplateArguments,
-} from "../src/models/Event";
-import { RecruitmentRequest } from "../src/models/RecruitmentRequest";
-import userFactory, { User } from "../src/models/User";
-import storage from "../src/storage";
-import role from "../src/utils/role";
+} from "../models/Event";
+import { RecruitmentRequest } from "../models/RecruitmentRequest";
+import userFactory, { User } from "../models/User";
+import storage from "../storage";
+import role from "./role";
 
 export const createUser = (role: role): Required<User> => {
   const user = userFactory({

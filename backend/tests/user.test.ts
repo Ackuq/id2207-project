@@ -3,7 +3,7 @@ import { handleGetSubTeam } from "../src/handlers/User";
 import { UserParams, CustomerService } from "../src/models/User";
 import addUser from "../src/utils/addUser";
 import role from "../src/utils/role";
-import { createUser } from "./helpers";
+import { createUser } from "../src/utils/helpers";
 
 test("login user", () => {
   const userDetails: UserParams = {

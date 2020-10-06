@@ -7,7 +7,7 @@ import {
 import { priority, TaskArguments, taskStatus } from "../src/models/Task";
 import storage from "../src/storage";
 import role from "../src/utils/role";
-import { createProject, createUser } from "./helpers";
+import { createProject, createUser } from "../src/utils/helpers";
 
 const serviceManager = createUser(role.serviceManager);
 const productionManager = createUser(role.productionManager);

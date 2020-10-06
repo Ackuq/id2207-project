@@ -72,7 +72,9 @@ const CreateTaskModal = ({ open, close, onSubmit, classes }) => {
               value={createTaskForm.values.assignee}
             >
               {subTeam.map((teamMember) => (
-                <MenuItem value={teamMember.id}>{teamMember.name}</MenuItem>
+                <MenuItem key={teamMember.id} value={teamMember.id}>
+                  {teamMember.name}
+                </MenuItem>
               ))}
             </Select>
             {createTaskForm.touched.assignee &&

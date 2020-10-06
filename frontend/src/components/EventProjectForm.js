@@ -9,8 +9,6 @@ import {
   FormControl,
   Select,
   CircularProgress,
-  FormControlLabel,
-  Checkbox,
 } from "@material-ui/core";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -19,6 +17,7 @@ import AuthContext from "../context/AuthContext";
 import SnackContext from "../context/SnackContext";
 import api from "../config/api";
 import roles from "../config/roles";
+import role from "../config/roles";
 
 const today = new Date();
 const tomorrow = new Date(today);
@@ -84,7 +83,9 @@ const EventProjectForm = ({ eventProject, classes, id }) => {
         onBlur={form.handleBlur}
         value={form.values.client}
         label="Client"
-        disabled={eventProject.archived}
+        disabled={
+          eventProject.archived || user.role !== role.administrationManager
+        }
       />
 
       <TextField
@@ -100,7 +101,9 @@ const EventProjectForm = ({ eventProject, classes, id }) => {
         onBlur={form.handleBlur}
         value={form.values.description}
         label="Description"
-        disabled={eventProject.archived}
+        disabled={
+          eventProject.archived || user.role !== role.administrationManager
+        }
       />
 
       <TextField
@@ -114,7 +117,9 @@ const EventProjectForm = ({ eventProject, classes, id }) => {
         onBlur={form.handleBlur}
         value={form.values.type}
         label="Type"
-        disabled={eventProject.archived}
+        disabled={
+          eventProject.archived || user.role !== role.administrationManager
+        }
       />
 
       <TextField
@@ -131,7 +136,9 @@ const EventProjectForm = ({ eventProject, classes, id }) => {
         InputLabelProps={{
           shrink: true,
         }}
-        disabled={eventProject.archived}
+        disabled={
+          eventProject.archived || user.role !== role.administrationManager
+        }
       />
 
       <TextField
@@ -146,7 +153,9 @@ const EventProjectForm = ({ eventProject, classes, id }) => {
         onBlur={form.handleBlur}
         value={form.values.participants}
         label="Participants"
-        disabled={eventProject.archived}
+        disabled={
+          eventProject.archived || user.role !== role.administrationManager
+        }
       />
 
       <TextField
@@ -161,24 +170,13 @@ const EventProjectForm = ({ eventProject, classes, id }) => {
         onBlur={form.handleBlur}
         value={form.values.budget}
         label="Budget"
-        disabled={eventProject.archived}
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            disabled={
-              user.role !== roles.financialManager || eventProject.archived
-            }
-            color="primary"
-            id="budgetApproved"
-            name="budgetApproved"
-            onChange={form.handleChange}
-            onBlur={form.handleBlur}
-            checked={form.values.budgetApproved}
-          />
+        disabled={
+          (user.role !== role.administrationManager &&
+            user.role !== role.financialManager) ||
+          eventProject.archived
         }
-        label="Approve budget"
       />
+
       <FormControl
         variant="filled"
         className={classes.formControl}
@@ -195,7 +193,7 @@ const EventProjectForm = ({ eventProject, classes, id }) => {
           onChange={form.handleChange}
           value={form.values.status}
           disabled={
-            user.role !== roles.administrationManager || eventProject.archived
+            user.role !== roles.administrationManager || !eventProject.archived
           }
         >
           <MenuItem value="planning">Planning</MenuItem>

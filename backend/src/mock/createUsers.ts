@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import role from "../utils/role";
-import * as helpers from "../../tests/helpers";
-import { handleCreateEventProject } from "../handlers/EventProject";
+import * as helpers from "../utils/helpers";
 
 export default (): void => {
   const _customerService = helpers.createUser(role.customerService);

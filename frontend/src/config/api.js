@@ -98,6 +98,13 @@ const api = {
   getTask: (id) => {
     return api.makeRequest(`/v1/task/${id}`);
   },
+
+  updateTask: (id, values) => {
+    return api.makeRequest(`/v1/task/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(values),
+    });
+  },
 };
 
 export default api;

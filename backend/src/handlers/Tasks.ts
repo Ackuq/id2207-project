@@ -73,8 +73,7 @@ export const handleEditTask = (
     if (
       ((values.description !== undefined &&
         values.description !== task.description) ||
-        (values.priority !== undefined &&
-          values.priority !== task.description) ||
+        (values.priority !== undefined && values.priority !== task.priority) ||
         (values.assignee !== undefined && values.assignee !== task.assignee)) &&
       user.id !== task.reporter
     ) {

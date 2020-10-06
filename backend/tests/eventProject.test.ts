@@ -9,7 +9,7 @@ import {
   EventTemplateArguments,
 } from "../src/models/Event";
 import role from "../src/utils/role";
-import { createUser, createWithArgsProject } from "./helpers";
+import { createUser, createWithArgsProject } from "../src/utils/helpers";
 
 test("create and list event projects", () => {
   const serviceManager = createUser(role.serviceManager);

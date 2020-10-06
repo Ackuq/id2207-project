@@ -9,7 +9,7 @@ import {
   recruitmentRequestStatus,
 } from "../src/models/RecruitmentRequest";
 import role from "../src/utils/role";
-import { createUser } from "./helpers";
+import { createUser } from "../src/utils/helpers";
 
 const serviceManager = createUser(role.serviceManager);
 const productionManager = createUser(role.productionManager);
