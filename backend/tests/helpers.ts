@@ -1,4 +1,8 @@
-import { EventProject, EventRequest } from "../src/models/Event";
+import {
+  EventProject,
+  EventRequest,
+  EventTemplateArguments,
+} from "../src/models/Event";
 import { RecruitmentRequest } from "../src/models/RecruitmentRequest";
 import userFactory, { User } from "../src/models/User";
 import storage from "../src/storage";
@@ -38,6 +42,14 @@ export const createProject = (): EventProject => {
     participants: 1000,
     type: "test",
   });
+  storage.eventProjects[eventProject.id] = eventProject;
+  return eventProject;
+};
+
+export const createWithArgsProject = (
+  details: EventTemplateArguments
+): EventProject => {
+  const eventProject = new EventProject(details);
   storage.eventProjects[eventProject.id] = eventProject;
   return eventProject;
 };

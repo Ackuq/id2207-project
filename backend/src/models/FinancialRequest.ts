@@ -8,8 +8,14 @@ export interface FinancialRequestArgs {
   reporter: string;
 }
 
+export enum financialRequestStatus {
+  pending = "pending",
+  rejected = "rejected",
+  accepted = "accepted",
+}
+
 export class FinancialRequest {
-  status = "pending";
+  status = financialRequestStatus.pending;
   id;
   project;
   amount;
@@ -20,7 +26,7 @@ export class FinancialRequest {
     this.id = generateId("financialRequests");
     this.project = values.project;
     this.amount = values.amount;
-    this.reason = !!values.reason;
+    this.reason = values.reason;
     this.department = values.department;
     this.reporter = values.reporter;
   }

@@ -1,6 +1,6 @@
 import generateId from "../utils/generateId";
 
-interface EventTemplateArguments {
+export interface EventTemplateArguments {
   description: string;
   type: string;
   budget: number;
@@ -56,11 +56,14 @@ export class EventRequest extends EventTemplate {
 }
 
 export enum eventStatus {
-  pending = "planning",
+  planning = "planning",
+  inProgress = "inProgress",
+  completed = "completed",
+  cancelled = "cancelled",
 }
 
 export class EventProject extends EventTemplate {
-  status: eventStatus = eventStatus.pending;
+  status: eventStatus = eventStatus.planning;
   id;
   tasks: Array<number> = [];
 

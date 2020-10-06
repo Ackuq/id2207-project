@@ -145,5 +145,5 @@ test("event request access control", () => {
     status: requestStatus.approved,
   });
 
-  expect(eventRequest.status === requestStatus.approved);
+  expect(eventRequest.status).toBe(requestStatus.approved);
 });
