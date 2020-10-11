@@ -11,6 +11,7 @@ export interface EventTemplateArguments {
 
 export enum requestStatus {
   pending = "pending",
+  feasible = "feasible",
   approved = "approved",
   cancelled = "cancelled",
 }

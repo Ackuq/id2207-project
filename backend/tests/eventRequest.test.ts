@@ -45,10 +45,10 @@ test("create and list event requests", () => {
   expect(eventRequest.client).toBe(eventRequestDetails.client);
 
   if (typeof eventRequestDetails.date === "string") {
-    expect(eventRequest.date.getTime()).toBe(
+    expect(eventRequest.date).toBe(
       new Date(eventRequestDetails.date).getTime()
     );
-  } else {
+  } else if (eventRequest.date instanceof Date) {
     expect(eventRequest.date.getTime()).toBe(
       eventRequestDetails.date.getTime()
     );
@@ -92,7 +92,7 @@ test("event request access control", () => {
   const users = usersDetails.map(addUser);
 
   const cst = users[0];
-  // const scs = users[1];
+  const scs = users[1];
   const financial = users[2];
   const admin = users[3];
 
@@ -112,6 +112,20 @@ test("event request access control", () => {
   let eventRequest = handleCreateEventRequest(eventRequestDetails);
 
   expect(eventRequest).toBeInstanceOf(EventRequest);
+
+  // This should throw since only senior customer officer can set to feasible
+  expect(() => {
+    handleEditEventRequest(admin, eventRequest.id, {
+      status: requestStatus.feasible,
+    });
+  }).toThrow();
+
+  // This should throw since only senior customer officer can set to feasible
+  eventRequest = handleEditEventRequest(scs, eventRequest.id, {
+    status: requestStatus.feasible,
+  });
+
+  expect(eventRequest.status).toBe(requestStatus.feasible);
 
   // This should throw since budget isn't approved
   expect(() => {

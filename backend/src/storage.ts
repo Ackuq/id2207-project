@@ -1,4 +1,3 @@
-import fs from "fs";
 import { EventProject, EventRequest } from "./models/Event";
 import { FinancialRequest } from "./models/FinancialRequest";
 import { RecruitmentRequest } from "./models/RecruitmentRequest";

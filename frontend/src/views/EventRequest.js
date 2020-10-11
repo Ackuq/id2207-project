@@ -1,26 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useFormik } from "formik";
-import * as yup from "yup";
 import {
-  Button,
-  Checkbox,
   CircularProgress,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  InputLabel,
   makeStyles,
-  MenuItem,
   Paper,
-  Select,
-  TextField,
   Typography,
 } from "@material-ui/core";
 import { useRouteMatch } from "react-router-dom";
 import api from "../config/api";
+import EventRequestForm from "../components/EventRequestForm";
 import SnackContext from "../context/SnackContext";
-import AuthContext from "../context/AuthContext";
-import roles from "../config/roles";
 
 const formatDate = (date) => {
   let d = new Date(date),
@@ -33,10 +21,6 @@ const formatDate = (date) => {
 
   return [year, month, day].join("-");
 };
-
-const today = new Date();
-const tomorrow = new Date(today);
-tomorrow.setDate(tomorrow.getDate() + 1);
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -53,209 +37,17 @@ const useStyles = makeStyles((theme) => ({
   formField: {
     marginBottom: "0.5rem",
   },
+
+  actionButtons: {
+    marginTop: "5rem",
+    display: "flex",
+    justifyContent: "space-around",
+  },
 }));
-
-const EventRequestForm = ({ eventRequest, classes, id }) => {
-  const { user } = useContext(AuthContext);
-  const setSnackState = useContext(SnackContext);
-
-  const form = useFormik({
-    initialValues: eventRequest,
-    initialTouched: {
-      status: true,
-    },
-    validationSchema: yup.object({
-      client: yup.string().required("Required"),
-      participants: yup
-        .number()
-        .integer("Must be an integer")
-        .positive("Must be positive")
-        .required("Required"),
-      date: yup.date().min(today, "Must be after today").required("Required"),
-      description: yup.string().required("Required"),
-      type: yup.string().required("Required"),
-      budget: yup.number().positive("Must be positive").required("Required"),
-      status: yup
-        .string()
-        .oneOf(["cancelled", "pending", "approved"], "Must be a valid status")
-        .required("Required"),
-      budgetApproved: yup.boolean(),
-    }),
-
-    onSubmit: (values) => {
-      return api
-        .updateEventRequest(id, values)
-        .then(() => {
-          setSnackState({
-            open: true,
-            message: "Event request updated",
-            severity: "success",
-          });
-        })
-        .catch((err) => {
-          setSnackState({
-            open: true,
-            message: err.error,
-            severity: "error",
-          });
-        });
-    },
-  });
-
-  return (
-    <form onSubmit={form.handleSubmit} className={classes.form}>
-      <TextField
-        variant="filled"
-        className={classes.formField}
-        size="medium"
-        id="client"
-        name="client"
-        helperText={form.touched.client && form.errors.client}
-        error={form.touched.client && !!form.errors.client}
-        onChange={form.handleChange}
-        onBlur={form.handleBlur}
-        value={form.values.client}
-        label="Client"
-        disabled={eventRequest.archived}
-      />
-
-      <TextField
-        variant="filled"
-        id="description"
-        name="description"
-        multiline
-        rows={3}
-        className={classes.formField}
-        helperText={form.touched.description && form.errors.description}
-        error={form.touched.description && !!form.errors.description}
-        onChange={form.handleChange}
-        onBlur={form.handleBlur}
-        value={form.values.description}
-        label="Description"
-        disabled={eventRequest.archived}
-      />
-
-      <TextField
-        variant="filled"
-        id="type"
-        name="type"
-        className={classes.formField}
-        helperText={form.touched.type && form.errors.type}
-        error={form.touched.type && !!form.errors.type}
-        onChange={form.handleChange}
-        onBlur={form.handleBlur}
-        value={form.values.type}
-        label="Type"
-        disabled={eventRequest.archived}
-      />
-
-      <TextField
-        variant="filled"
-        id="date"
-        type="date"
-        className={classes.formField}
-        helperText={form.touched.date && form.errors.date}
-        error={form.touched.date && !!form.errors.date}
-        onChange={form.handleChange}
-        onBlur={form.handleBlur}
-        value={form.values.date}
-        label="Date"
-        InputLabelProps={{
-          shrink: true,
-        }}
-        disabled={eventRequest.archived}
-      />
-
-      <TextField
-        variant="filled"
-        id="participants"
-        name="participants"
-        type="number"
-        className={classes.formField}
-        helperText={form.touched.participants && form.errors.participants}
-        error={form.touched.participants && !!form.errors.participants}
-        onChange={form.handleChange}
-        onBlur={form.handleBlur}
-        value={form.values.participants}
-        label="Participants"
-        disabled={eventRequest.archived}
-      />
-
-      <TextField
-        variant="filled"
-        id="budget"
-        name="budget"
-        type="number"
-        className={classes.formField}
-        helperText={form.touched.budget && form.errors.budget}
-        error={form.touched.budget && !!form.errors.budget}
-        onChange={form.handleChange}
-        onBlur={form.handleBlur}
-        value={form.values.budget}
-        label="Budget"
-        disabled={eventRequest.archived}
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            disabled={
-              user.role !== roles.financialManager || eventRequest.archived
-            }
-            color="primary"
-            id="budgetApproved"
-            name="budgetApproved"
-            onChange={form.handleChange}
-            onBlur={form.handleBlur}
-            checked={form.values.budgetApproved}
-          />
-        }
-        label="Approve budget"
-      />
-      <FormControl
-        variant="filled"
-        className={classes.formControl}
-        error={form.touched.status && !!form.errors.status}
-      >
-        <InputLabel shrink id="status-label">
-          Status
-        </InputLabel>
-        <Select
-          labelId="status-label"
-          id="status"
-          name="status"
-          onBlur={form.handleBlur}
-          onChange={form.handleChange}
-          value={form.values.status}
-          disabled={
-            user.role !== roles.administrationManager || eventRequest.archived
-          }
-        >
-          <MenuItem value="pending">Pending</MenuItem>
-          <MenuItem value="cancelled">Cancelled</MenuItem>
-          <MenuItem value="approved">Approved</MenuItem>
-        </Select>
-        {form.touched.status && !!form.errors.status && (
-          <FormHelperText>{form.errors.status}</FormHelperText>
-        )}
-      </FormControl>
-      {!eventRequest.archived && (
-        <Button
-          disableRipple
-          color="primary"
-          style={{ marginTop: "1rem" }}
-          variant="contained"
-          type="submit"
-          disabled={!form.isValid || form.isSubmitting}
-        >
-          {form.isSubmitting ? <CircularProgress size={25} /> : "Update"}
-        </Button>
-      )}
-    </form>
-  );
-};
 
 const EventRequest = () => {
   const classes = useStyles();
+  const setSnackState = useContext(SnackContext);
 
   const match = useRouteMatch();
   const { id } = match.params;
@@ -278,6 +70,25 @@ const EventRequest = () => {
     });
   }, [id]);
 
+  const onSubmit = (values) => {
+    return api
+      .updateEventRequest(id, values)
+      .then(() => {
+        setSnackState({
+          open: true,
+          message: "Event request updated",
+          severity: "success",
+        });
+      })
+      .catch((err) => {
+        setSnackState({
+          open: true,
+          message: err.error,
+          severity: "error",
+        });
+      });
+  };
+
   return (
     <Paper className={classes.card}>
       <Typography variant="h4">
@@ -288,7 +99,7 @@ const EventRequest = () => {
         <EventRequestForm
           classes={classes}
           eventRequest={eventRequest}
-          id={id}
+          onSubmit={onSubmit}
         />
       ) : (
         <CircularProgress />

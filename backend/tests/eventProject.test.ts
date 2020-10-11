@@ -35,10 +35,8 @@ test("create and list event projects", () => {
   expect(eventProject.participants).toBe(projectArgs.participants);
 
   if (typeof projectArgs.date === "string") {
-    expect(eventProject.date.getTime()).toBe(
-      new Date(projectArgs.date).getTime()
-    );
-  } else {
+    expect(eventProject.date).toBe(new Date(projectArgs.date).getTime());
+  } else if (eventProject.date instanceof Date) {
     expect(eventProject.date.getTime()).toBe(projectArgs.date.getTime());
   }
 

@@ -53,13 +53,34 @@ export const handleEditEventRequest = (
 
       if (
         newValues.status !== undefined &&
-        newValues.status !== eventRequest.status &&
-        user.role !== role.administrationManager
+        newValues.status !== eventRequest.status
       ) {
-        throw {
-          error: new Error("Only administration manager can change status"),
-          status: 403,
-        };
+        if (
+          newValues.status === requestStatus.feasible ||
+          (newValues.status === requestStatus.cancelled &&
+            eventRequest.status === requestStatus.pending)
+        ) {
+          if (user.role !== role.seniorCustomerService) {
+            throw {
+              error: new Error(
+                "Only senior customer service can decide feasibility"
+              ),
+              status: 403,
+            };
+          }
+        } else if (eventRequest.status === requestStatus.pending) {
+          throw {
+            error: new Error("Illegal status change"),
+            status: 403,
+          };
+        } else {
+          if (user.role !== role.administrationManager) {
+            throw {
+              error: new Error("Only administration manager can change status"),
+              status: 403,
+            };
+          }
+        }
       }
 
       const newEventRequest = { ...eventRequest, ...newValues };
@@ -114,12 +135,14 @@ export const handleCreateEventRequest = (
 export const handleGetEventRequests = (
   user: Required<User>
 ): Array<EventRequest> => {
-  if (
-    user.role === role.seniorCustomerService ||
+  if (user.role === role.seniorCustomerService) {
+    return Object.values(storage.eventRequests);
+  } else if (
     user.role === role.financialManager ||
     user.role === role.administrationManager
   ) {
-    return Object.values(storage.eventRequests);
+    const requests = Object.values(storage.eventRequests);
+    return requests.filter((r) => r.status !== requestStatus.pending);
   } else if (user.role === role.customerService) {
     const eventRequests = Object.values(storage.eventRequests).filter(
       (e) => e.reporter === user.id
@@ -136,13 +159,16 @@ export const handleGetEventRequest = (
 ): EventRequest => {
   const eventRequest = storage.eventRequests[eventId];
   if (eventRequest) {
-    if (
-      user.role === role.seniorCustomerService ||
+    if (user.role === role.seniorCustomerService) {
+      return eventRequest;
+    } else if (
       user.role === role.financialManager ||
       user.role === role.administrationManager
-    )
-      return eventRequest;
-    else if (user.role === role.customerService) {
+    ) {
+      if (eventRequest.status !== requestStatus.pending) {
+        return eventRequest;
+      }
+    } else if (user.role === role.customerService) {
       if (eventRequest.reporter === user.id) {
         return eventRequest;
       }
