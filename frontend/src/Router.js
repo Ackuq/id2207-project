@@ -27,11 +27,11 @@ const AuthRoutes = () => (
       <Route exact path={routes.createEventRequest}>
         <CreateEventRequest />
       </Route>
-      <Route exact path={routes.eventRequests}>
-        <EventRequests />
-      </Route>
       <Route exact path={routes.eventRequest}>
         <EventRequest />
+      </Route>
+      <Route exact path={routes.eventRequests}>
+        <EventRequests />
       </Route>
       <Route exact path={routes.eventProjects}>
         <EventProjects />

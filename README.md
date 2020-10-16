@@ -58,6 +58,14 @@ Although this project does not include a proper solution for persistent storage,
 
 ## Tests
 
-There are multiple tests for the backend which are developed using `jest`, they are located under `backend/tests/`.
+### Unit tests
+
+There are multiple unit tests for the backend which are developed using `jest`, they are located under `backend/tests/`.
 
 To run all the tests, simply run `yarn test`. If you only want to run a single test file, run `yarn test tests/<file>`, for example: `yarn test tests/user.test.ts`
+
+### Acceptance tests
+
+The acceptance test are available in the frontend directory in `frontend/src/tests/`. There are two available, one that checks the login functionality and one that checks the flow for creating an event request.
+
+To run these tests, first make sure to have a server ready with mocked user (`cd backend/ && yarn start:mock`) and then run `yarn test` inside the frontend directory (`cd frontend/ && yarn test`).
